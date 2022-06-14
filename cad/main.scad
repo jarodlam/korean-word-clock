@@ -3,7 +3,7 @@ PLY_THICKNESS = 3;
 GRID_SIZE = 1000 / 60 * 2;  // 2 LEDs per grid, 60 LEDS per metre
 GRID_THICKNESS = 5;
 GRID_COUNT_X = 7;
-GRID_COUNT_Y = 9;
+GRID_COUNT_Y = 7;
 
 FRAME_WIDTH = 15;
 
@@ -23,8 +23,10 @@ TEXTGRID = [
 ];
 TEXTGRID_X = len(TEXTGRID);
 TEXTGRID_Y = len(TEXTGRID[0]);
+TEXTGRID_WIDTH = TEXTGRID_X * GRID_SIZE;
+TEXTGRID_HEIGHT = TEXTGRID_X * GRID_SIZE;
 
-BAFFLE_HEIGHT = 3 * PLY_THICKNESS;
+BAFFLE_HEIGHT = 4 * PLY_THICKNESS;
 
 
 module frame_piece(length, width, half = false) {
@@ -83,15 +85,15 @@ module grid() {
       for (i = [-2.5, -1.5, -0.5, 0.5, 1.5, 2.5]) {
         grid_vertical(i);
       }
-      for (i = [-3.5, -2.5, -0.5, 0.5, 2.5, 3.5]) {
+      for (i = [-2.5, -0.5, 0.5, 2.5]) {
         grid_horizontal(i);
       }
     }
     
     // Cutout for text grid
     cube([
-      TEXTGRID_X * GRID_SIZE - GRID_THICKNESS, 
-      TEXTGRID_Y * GRID_SIZE - GRID_THICKNESS, 
+      TEXTGRID_WIDTH - GRID_THICKNESS, 
+      TEXTGRID_HEIGHT - GRID_THICKNESS, 
       PLY_THICKNESS * 3
     ], center = true);
   }
@@ -131,14 +133,56 @@ module diffuser_cell(x, y) {
   }
 }
 
-module baffle(length) {
-  difference() {
-    square([length, BAFFLE_HEIGHT], center = true);
+module m3cutout(length) {
+  translate([length / 2, 0, 0])
+    square([length, 3], center = true);
+  translate([3, 0, 0])
+    square([2.5, 5.5], center = true);
+}
+
+module baffle(length, margin, joints = false) {
+  linear_extrude(PLY_THICKNESS, center = true) {
+    difference() {
+      // Main body
+      square([length + margin, BAFFLE_HEIGHT], center = true);
+      
+      // Slots
+      for (x = [-length/2:GRID_SIZE:length/2]) {
+        translate([x, BAFFLE_HEIGHT/2]) {
+          square([PLY_THICKNESS, BAFFLE_HEIGHT], center = true);
+        }
+      }
+      
+      // Screw holes
+      if (joints) {
+        translate([-(length/2+7), BAFFLE_HEIGHT/2]) rotate(-90) m3cutout(8);
+        translate([(length/2+7), BAFFLE_HEIGHT/2]) rotate(-90) m3cutout(8);
+      }
+    }
+  }
+}
+
+module baffle_horizontal(pos) {
+  translate([0, pos, -BAFFLE_HEIGHT/2]) {
+    rotate([-90, 0, 0]) baffle(TEXTGRID_WIDTH, 25, joints = true);
   }
 }
 
 module baffle_vertical(pos) {
-  
+  translate([pos, 0, -BAFFLE_HEIGHT/2]) {
+    rotate([90, 0, 90]) baffle(TEXTGRID_HEIGHT, 10);
+  }
+}
+
+module baffles() {
+  xrange = [-TEXTGRID_WIDTH/2:GRID_SIZE:TEXTGRID_WIDTH/2];
+  yrange = [-TEXTGRID_WIDTH/2:GRID_SIZE:TEXTGRID_WIDTH/2];
+  for (pos = xrange) {
+    color([1, 0.5, 1]) baffle_vertical(pos);
+  }
+  for (pos = yrange) {
+    color([0.5, 0.5, 1]) baffle_horizontal(pos);
+  }
 }
 
 module layer1() {
@@ -163,6 +207,30 @@ module layer3() {
   }
 }
 
+module framelayer() {
+  color([0.8, 0.5, 0.5]) frame();
+}
+
+module backboard() {
+  color([0.8, 1, 0.8]) linear_extrude(PLY_THICKNESS) {
+    difference() {
+      square([OUTER_WIDTH, OUTER_HEIGHT], center = true);
+      
+      // Bottom cutout
+      cut_pos = -INNER_HEIGHT/2 + GRID_SIZE/2;
+      translate([0, cut_pos, 0]) square([TEXTGRID_WIDTH, GRID_SIZE], center = true);
+    }
+  }
+}
+
 translate([0, 0, PLY_THICKNESS *  0]) layer1();
 translate([0, 0, PLY_THICKNESS * -1]) layer2();
+translate([0, 0, PLY_THICKNESS * -1]) baffles();
 translate([0, 0, PLY_THICKNESS * -2]) layer3();
+translate([0, 0, PLY_THICKNESS * -3]) framelayer();
+translate([0, 0, PLY_THICKNESS * -4]) framelayer();
+translate([0, 0, PLY_THICKNESS * -5]) framelayer();
+translate([0, 0, PLY_THICKNESS * -6]) framelayer();
+translate([0, 0, PLY_THICKNESS * -7]) framelayer();
+translate([0, 0, PLY_THICKNESS * -8]) backboard();
+
