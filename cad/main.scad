@@ -3,7 +3,7 @@ PLY_THICKNESS = 3;
 GRID_SIZE = 1000 / 60 * 2;  // 2 LEDs per grid, 60 LEDS per metre
 GRID_THICKNESS = 5;
 GRID_COUNT_X = 7;
-GRID_COUNT_Y = 7;
+GRID_COUNT_Y = 9;
 
 FRAME_WIDTH = 15;
 
@@ -13,6 +13,10 @@ OUTER_WIDTH = INNER_WIDTH + 2 * FRAME_WIDTH;
 OUTER_HEIGHT = INNER_HEIGHT + 2 * FRAME_WIDTH;
 echo(OUTER_WIDTH);
 echo(OUTER_HEIGHT);
+
+BORDER_SPACING = GRID_SIZE * 0.8;
+BORDER_OVERHANG = 10;
+BORDER_SHORT_LENGTH = BORDER_SPACING * 2 + BORDER_OVERHANG;
 
 TEXTGRID = [
 ["열", "한", "다", "세", "네"],
@@ -27,6 +31,10 @@ TEXTGRID_WIDTH = TEXTGRID_X * GRID_SIZE;
 TEXTGRID_HEIGHT = TEXTGRID_X * GRID_SIZE;
 
 BAFFLE_HEIGHT = 4 * PLY_THICKNESS;
+
+LED_WIDTH = 5;
+LED_HEIGHT = 5;
+LED_SPACING = 1000 / 60;
 
 
 module frame_piece(length, width, half = false) {
@@ -96,6 +104,39 @@ module grid() {
       TEXTGRID_HEIGHT - GRID_THICKNESS, 
       PLY_THICKNESS * 3
     ], center = true);
+  }
+}
+
+module grid2_piece(length) {
+  translate([0, 0, PLY_THICKNESS / 2]) {
+    cube([length, GRID_THICKNESS, PLY_THICKNESS], center = true);
+  }
+}
+
+module grid2_corner() {
+  translate([0, INNER_HEIGHT/2 - BORDER_SPACING, 0])
+  grid2_piece(INNER_WIDTH);
+  
+  translate([-INNER_WIDTH/2 + BORDER_SPACING, 0, 0])
+  rotate([0, 0, 90])
+  grid2_piece(INNER_HEIGHT);
+  
+  translate([-(INNER_WIDTH - BORDER_SHORT_LENGTH) / 2, INNER_HEIGHT/2 - BORDER_SPACING * 2, 0])
+  grid2_piece(BORDER_SHORT_LENGTH);
+  
+  translate([-INNER_WIDTH/2 + BORDER_SPACING * 2, (INNER_HEIGHT - BORDER_SHORT_LENGTH) / 2, 0])
+  rotate([0, 0, 90])
+  grid2_piece(BORDER_SHORT_LENGTH);
+}
+
+module grid2() {
+  union() {
+    grid2_corner();
+    mirror([1, 0, 0]) grid2_corner();
+    mirror([0, 1, 0]) {
+      grid2_corner();
+      mirror([1, 0, 0]) grid2_corner();
+    }
   }
 }
 
@@ -185,9 +226,49 @@ module baffles() {
   }
 }
 
+module led_mount_screw_holes(n) {
+  length = n * GRID_SIZE;
+  for (i = [-length/2 : GRID_SIZE : length/2]) {
+    translate([0, i, 0])
+    circle(3);
+  }
+}
+
+module led_cutouts(n) {
+  length = (n * 2 - 1) * LED_SPACING;
+  for (i = [-length/2 : LED_SPACING : length/2]) {
+    translate([i, 0, 0])
+    square([LED_WIDTH, LED_HEIGHT], center = true);
+  }
+}
+
+module led_mount() {
+  linear_extrude(PLY_THICKNESS) {
+    difference() {
+      square([TEXTGRID_WIDTH + 25, TEXTGRID_HEIGHT + 10], center = true);
+      
+      for (i = [0 : TEXTGRID_Y - 1]) {
+        translate([
+          0,
+          (i - (TEXTGRID_X - 1) / 2) * -GRID_SIZE
+        ])
+        led_cutouts(TEXTGRID_X);
+      }
+      
+      translate([TEXTGRID_WIDTH / 2 + 7, 0, 0])
+      led_mount_screw_holes(TEXTGRID_Y);
+      
+      translate([-TEXTGRID_WIDTH / 2 - 7, 0, 0])
+      led_mount_screw_holes(TEXTGRID_Y);
+    }
+  }
+}
+
 module layer1() {
   color([0.5, 0, 0]) frame();
-  color([0.4, 0.2, 0]) grid();
+  //color([0.4, 0.2, 0]) grid();
+  color([0.4, 0.2, 0]) grid2();
+  color([0.4, 0.2, 0]) grid2();
 }
 
 module layer2() {
@@ -200,7 +281,9 @@ module layer2() {
 
 module layer3() {
   color([0.7, 0.4, 0.4]) frame();
-  color([0.9, 0.9, 0.9]) for (i = [0 : TEXTGRID_X - 1]) {
+  
+  color([0.9, 0.9, 0.9]) 
+  for (i = [0 : TEXTGRID_X - 1]) {
     for (j = [0 : TEXTGRID_Y - 1]) {
       linear_extrude(PLY_THICKNESS) diffuser_cell(i, j);
     }
@@ -223,6 +306,7 @@ module backboard() {
   }
 }
 
+translate([0, 0, PLY_THICKNESS *  1]) layer1();
 translate([0, 0, PLY_THICKNESS *  0]) layer1();
 translate([0, 0, PLY_THICKNESS * -1]) layer2();
 translate([0, 0, PLY_THICKNESS * -1]) baffles();
@@ -231,6 +315,7 @@ translate([0, 0, PLY_THICKNESS * -3]) framelayer();
 translate([0, 0, PLY_THICKNESS * -4]) framelayer();
 translate([0, 0, PLY_THICKNESS * -5]) framelayer();
 translate([0, 0, PLY_THICKNESS * -6]) framelayer();
+translate([0, 0, PLY_THICKNESS * -6]) led_mount();
 translate([0, 0, PLY_THICKNESS * -7]) framelayer();
 translate([0, 0, PLY_THICKNESS * -8]) backboard();
 
