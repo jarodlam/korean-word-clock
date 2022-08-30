@@ -32,9 +32,12 @@ TEXTGRID_HEIGHT = TEXTGRID_X * GRID_SIZE;
 
 BAFFLE_HEIGHT = 4 * PLY_THICKNESS;
 
-LED_WIDTH = 5;
-LED_HEIGHT = 5;
+LED_WIDTH = 5.5;
+LED_HEIGHT = 5.5;
 LED_SPACING = 1000 / 60;
+
+CUTOUT_HEIGHT = 40;
+CUTOUT_WIDTH = 160;
 
 
 module frame_piece(length, width, half = false) {
@@ -300,8 +303,8 @@ module backboard() {
       square([OUTER_WIDTH, OUTER_HEIGHT], center = true);
       
       // Bottom cutout
-      cut_pos = -INNER_HEIGHT/2 + GRID_SIZE/2;
-      translate([0, cut_pos, 0]) square([TEXTGRID_WIDTH, GRID_SIZE], center = true);
+      cut_pos = -INNER_HEIGHT/2 + CUTOUT_HEIGHT/2;
+      translate([0, cut_pos, 0]) square([CUTOUT_WIDTH, CUTOUT_HEIGHT], center = true);
     }
   }
 }
