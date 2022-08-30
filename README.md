@@ -22,23 +22,29 @@
 ## Translations
 Korean | English
 ------ | -------
-시 | hour/o'clock
-한 | one
-두 | two
-세 | three
-네 | four
-다섯 | five
-여섯 | six
-일곱 | seven
-여덟 | eight
-아홉 | nine
-열 | ten
-열한 | eleven
-열두 | twelve
+한시 | one o'clock
+두시 | two o'clock
+세시 | three o'clock
+네시 | four o'clock
+다섯시 | five o'clock
+여섯시 | six o'clock
+일곱시 | seven o'clock
+여덟시 | eight o'clock
+아홉시 | nine o'clock
+열시 | ten o'clock
+열한시 | eleven o'clock
+열두시 | twelve o'clock
 자정 | midnight
 정오 | noon
+오분 | five minutes
+십분 | ten minutes
+이십분 | twenty minutes
+삼십분 | thirty minutes
+사십분 | forty minutes
+오십분 | fifty minutes
 
 ## Acknowledgements
 * [HangulClock](https://suapapa.github.io/site-hangulclocks/) by Homin Lee
 * [Raspberry Pi Pico EAGLE library](https://github.com/Lobo-T/RPI-Pico-Eagle-lib) by Lobo-T
-* [pi_pico_neopixel](https://github.com/blaz-r/pi_pico_neopixel) by Blaž Rolih
+* [pi_pico_neopixel](https://github.com/blaz-r/pi_pico_neopixel) MicroPython library by Blaž Rolih
+* [rv3028-python](https://github.com/pimoroni/rv3028-python) MicroPython library by Pimoroni
