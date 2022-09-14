@@ -1,3 +1,10 @@
+///////////////
+// Constants //
+///////////////
+
+$fs=0.5;  // mm
+$fa=5;    // degrees
+
 PLY_THICKNESS = 3;
 
 GRID_SIZE = 1000 / 60 * 2;  // 2 LEDs per grid, 60 LEDS per metre
@@ -5,7 +12,7 @@ GRID_THICKNESS = 5;
 GRID_COUNT_X = 7;
 GRID_COUNT_Y = 9;
 
-FRAME_WIDTH = 15;
+FRAME_WIDTH = 20;
 
 INNER_WIDTH = GRID_COUNT_X * GRID_SIZE - GRID_THICKNESS;
 INNER_HEIGHT = GRID_COUNT_Y * GRID_SIZE - GRID_THICKNESS;
@@ -39,6 +46,11 @@ LED_SPACING = 1000 / 60;
 CUTOUT_HEIGHT = 40;
 CUTOUT_WIDTH = 160;
 
+
+
+////////////////
+// Components //
+////////////////
 
 module frame_piece(length, width, half = false) {
   linear_extrude(PLY_THICKNESS) {
@@ -233,7 +245,7 @@ module led_mount_screw_holes(n) {
   length = n * GRID_SIZE;
   for (i = [-length/2 : GRID_SIZE : length/2]) {
     translate([0, i, 0])
-    circle(3);
+    circle(d = 3);
   }
 }
 
@@ -267,6 +279,52 @@ module led_mount() {
   }
 }
 
+module screwhole_cutouts() {
+  translate([INNER_WIDTH/2 + 6, TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  circle(d = 3);
+  
+  translate([INNER_WIDTH/2 + 6, -TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  circle(d = 3);
+  
+  translate([-INNER_WIDTH/2 - 6, TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  circle(d = 3);
+  
+  translate([-INNER_WIDTH/2 - 6, -TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  circle(d = 3);
+}
+
+module nuthole_cutout() {
+  circle(r = 3.1, $fn = 6);
+}
+
+module nuthole_cutouts() {
+  translate([INNER_WIDTH/2 + 6, TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  nuthole_cutout();
+  
+  translate([INNER_WIDTH/2 + 6, -TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  nuthole_cutout();
+  
+  translate([-INNER_WIDTH/2 - 6, TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  nuthole_cutout();
+  
+  translate([-INNER_WIDTH/2 - 6, -TEXTGRID_HEIGHT/2, -1])
+  linear_extrude(PLY_THICKNESS * 2)
+  nuthole_cutout();
+}
+
+
+
+////////////
+// Layers //
+////////////
+
 module layer1() {
   color([0.5, 0, 0]) frame();
   //color([0.4, 0.2, 0]) grid();
@@ -282,43 +340,60 @@ module layer2() {
   }
 }
 
-module layer3() {
-  color([0.7, 0.4, 0.4]) frame();
-  
-  color([0.9, 0.9, 0.9]) 
-  for (i = [0 : TEXTGRID_X - 1]) {
-    for (j = [0 : TEXTGRID_Y - 1]) {
-      linear_extrude(PLY_THICKNESS) diffuser_cell(i, j);
-    }
+module framelayer(screwholes = false, nutholes = false) {
+  color([0.8, 0.5, 0.5]) difference() {    
+    frame();
+    
+    if (screwholes) {screwhole_cutouts();}
+    if (nutholes) {nuthole_cutouts();}
   }
 }
 
-module framelayer() {
-  color([0.8, 0.5, 0.5]) frame();
+module backframe() {
+  linear_extrude(PLY_THICKNESS)
+  difference() {
+    square([OUTER_WIDTH, OUTER_HEIGHT], center = true);
+    square([OUTER_WIDTH-FRAME_WIDTH, OUTER_HEIGHT-FRAME_WIDTH], center = true);
+  }
 }
 
 module backboard() {
-  color([0.8, 1, 0.8]) linear_extrude(PLY_THICKNESS) {
-    difference() {
-      square([OUTER_WIDTH, OUTER_HEIGHT], center = true);
-      
-      // Bottom cutout
-      cut_pos = -INNER_HEIGHT/2 + CUTOUT_HEIGHT/2;
-      translate([0, cut_pos, 0]) square([CUTOUT_WIDTH, CUTOUT_HEIGHT], center = true);
+  color([0.8, 1, 0.8])
+  difference() {
+    linear_extrude(PLY_THICKNESS) {
+      difference() {
+        square([OUTER_WIDTH-FRAME_WIDTH-1, OUTER_HEIGHT-FRAME_WIDTH-1], center = true);
+        
+        // Bottom cutout
+        cut_pos = -INNER_HEIGHT/2 + CUTOUT_HEIGHT/2;
+        translate([0, cut_pos, 0]) square([CUTOUT_WIDTH, CUTOUT_HEIGHT], center = true);
+      }
     }
+    
+    screwhole_cutouts();
   }
 }
 
+
+
+//////////////
+// Assembly //
+//////////////
+
+//projection() {    // Uncomment for export
 translate([0, 0, PLY_THICKNESS *  1]) layer1();
 translate([0, 0, PLY_THICKNESS *  0]) layer1();
 translate([0, 0, PLY_THICKNESS * -1]) layer2();
 translate([0, 0, PLY_THICKNESS * -1]) baffles();
-translate([0, 0, PLY_THICKNESS * -2]) layer3();
-translate([0, 0, PLY_THICKNESS * -3]) framelayer();
-translate([0, 0, PLY_THICKNESS * -4]) framelayer();
-translate([0, 0, PLY_THICKNESS * -5]) framelayer();
-translate([0, 0, PLY_THICKNESS * -6]) framelayer();
+translate([0, 0, PLY_THICKNESS * -2]) framelayer(screwholes = true);
+translate([0, 0, PLY_THICKNESS * -3]) framelayer(screwholes = true);
+translate([0, 0, PLY_THICKNESS * -4]) framelayer(screwholes = true);
+translate([0, 0, PLY_THICKNESS * -5]) framelayer(screwholes = true);
+translate([0, 0, PLY_THICKNESS * -6]) framelayer(nutholes = true);
 translate([0, 0, PLY_THICKNESS * -6]) led_mount();
-translate([0, 0, PLY_THICKNESS * -7]) framelayer();
+translate([0, 0, PLY_THICKNESS * -7]) framelayer(screwholes = true);
+translate([0, 0, PLY_THICKNESS * -8]) backframe();
 translate([0, 0, PLY_THICKNESS * -8]) backboard();
-
+//rotate([0, 90, 0]) baffle_vertical(1);      // For export only
+//rotate([90, 0, 0]) baffle_horizontal(1);    // For export only
+//}                 // Uncomment for export
