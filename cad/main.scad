@@ -129,17 +129,20 @@ module grid2_piece(length) {
 }
 
 module grid2_corner() {
-  translate([0, INNER_HEIGHT/2 - BORDER_SPACING, 0])
+  xlimit = INNER_WIDTH/2 + GRID_THICKNESS/2;
+  ylimit = INNER_HEIGHT/2 + GRID_THICKNESS/2;
+  
+  translate([0, ylimit - BORDER_SPACING, 0])
   grid2_piece(INNER_WIDTH);
   
-  translate([-INNER_WIDTH/2 + BORDER_SPACING, 0, 0])
+  translate([-xlimit + BORDER_SPACING, 0, 0])
   rotate([0, 0, 90])
   grid2_piece(INNER_HEIGHT);
   
-  translate([-(INNER_WIDTH - BORDER_SHORT_LENGTH) / 2, INNER_HEIGHT/2 - BORDER_SPACING * 2, 0])
+  translate([-(INNER_WIDTH - BORDER_SHORT_LENGTH) / 2, ylimit - BORDER_SPACING * 2, 0])
   grid2_piece(BORDER_SHORT_LENGTH);
   
-  translate([-INNER_WIDTH/2 + BORDER_SPACING * 2, (INNER_HEIGHT - BORDER_SHORT_LENGTH) / 2, 0])
+  translate([-xlimit + BORDER_SPACING * 2, (INNER_HEIGHT - BORDER_SHORT_LENGTH) / 2, 0])
   rotate([0, 0, 90])
   grid2_piece(BORDER_SHORT_LENGTH);
 }
