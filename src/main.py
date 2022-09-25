@@ -118,12 +118,11 @@ def callback_mode_factory(clockface):
         clockface.cycle_effect()
     return callback_mode
 
-def rgb_full_value(r, g, b):
+def rgb_to_hsv(r, g, b):
     """
-    Convert an RGB colour to HSV, set V to 100%, then convert back.
+    Convert an RGB colour to HSV.
     From https://en.wikipedia.org/wiki/HSL_and_HSV#Color_conversion_formulae.
     """
-    # Convert to HSV
     xmax = max(r, g, b)
     xmin = min(r, g, b)
     c = xmax - xmin
@@ -136,15 +135,18 @@ def rgb_full_value(r, g, b):
         h = 2 + (b - r) / c
     elif v == b:
         h = 4 + (r - g) / c
+    h = h * 60
     s = 0
     if v != 0:
         s = c / v
-    
-    # Set v to 100%
-    v = 1
-    s = min(s * 2, 1)
-    
-    # Convert back to RGB
+    return h, s, v
+
+def hsv_to_rgb(h, s, v):
+    """
+    Convert an HSV colour to RGB.
+    From https://en.wikipedia.org/wiki/HSL_and_HSV#Color_conversion_formulae
+    """
+    h = h / 60
     c = v * s
     x = c * (1 - abs((h % 2) - 1))
     if h < 1: rgb = (c, x, 0)
@@ -152,10 +154,25 @@ def rgb_full_value(r, g, b):
     elif h < 3: rgb = (0, c, x)
     elif h < 4: rgb = (0, x, c)
     elif h < 5: rgb = (x, 0, c)
-    elif h < 6: rgb = (c, 0, x)
+    else: rgb = (c, 0, x)
     m = v - c
     rgb = (rgb[0] + m) * 255, (rgb[1] + m) * 255, (rgb[2] + m) * 255
     return round(rgb[0]), round(rgb[1]), round(rgb[2])
+
+def rgb_full_value(r, g, b):
+    """
+    Convert an RGB colour to HSV, set V to 100%, then convert back.
+    From https://en.wikipedia.org/wiki/HSL_and_HSV#Color_conversion_formulae
+    """
+    # Convert to HSV
+    h, s, v = rgb_to_hsv(r, g, b)
+    
+    # Set v to 100%
+    v = 1
+    s = min(s * 2, 1)
+    
+    # Convert back to RGB
+    return hsv_to_rgb(h, s, v)
     
 
 class ClockFace:
@@ -289,6 +306,30 @@ class ClockFace:
             self.show()
             time.sleep_ms(100)
     
+    def effect_hour_min(self, arr, rgbw_hour, rgbw_min):
+        """
+        Apply one colour to hour LEDs, another colour to minute LEDs.
+        """
+        arr_rgbw = [[(0, 0, 0, 0) for _ in row] for row in arr]
+        hm_pos = [
+            ['h', 'h', 'h', 'h', 'h'], 
+            ['h', 'h', 'h', 'h', 'h'], 
+            ['h', 'h', 'h', 'h', 'h'],
+            ['h', 'h', 'm', 'm', 'm'],
+            ['m', 'h', 'm', 'm', 'm']
+        ]
+        
+        for row, columns in enumerate(arr):
+            for col, on in enumerate(columns):
+                if not on: continue
+                
+                rgbw = (0, 0, 0, 255)
+                if hm_pos[row][col] == 'h': rgbw = rgbw_hour
+                elif hm_pos[row][col] == 'm': rgbw = rgbw_min
+                
+                arr_rgbw[row][col] = rgbw
+        return arr_rgbw
+    
     def effect_white(self, arr):
         arr_rgbw = [[(0, 0, 0, 0) for _ in row] for row in arr]
         for row, columns in enumerate(arr):
@@ -299,36 +340,57 @@ class ClockFace:
     
     def effect_rainbow(self, arr):
         arr_rgbw = [[(0, 0, 0, 0) for _ in row] for row in arr]
-        nrow = len(arr)
-        ncol = len(arr[0])
         
-        #period = 11483  # randomly selected prime number
-        period = 127
+        #period = 10_000
+        period = 60
         t = time.time() % period
-        wave_r = 0.5 * sin((2 * pi / period) * (t - (0 * period / 3))) + 0.5
-        wave_g = 0.5 * sin((2 * pi / period) * (t - (1 * period / 3))) + 0.5
-        wave_b = 0.5 * sin((2 * pi / period) * (t - (2 * period / 3))) + 0.5
         
-        # period_rot = 8209  # randomly selected prime number
-        period_rot = 31
-        t_rot = time.time() % period_rot
-        theta = (2 * pi) * (t_rot / period_rot)
+        hue_h = (t / period * 360) % 360
+        hue_m = (120 + t / period * 360) % 360
+        
+        rgb_h = hsv_to_rgb(hue_h, 1, 1) + (0,)
+        rgb_m = hsv_to_rgb(hue_m, 1, 1) + (0,)
+        
+        return self.effect_hour_min(arr, rgb_h, rgb_m)
+    
+    def effect_birthday(self, arr):
+        """
+        A rainbow cycling effect inspired by party balloons.
+        """
+        arr_rgbw = [[(0, 0, 0, 0) for _ in row] for row in arr]
+        
+        # Colours to cycle
+        colours = [
+             (255, 0, 0, 0),    # Red
+             (0, 255, 255, 0),  # Cyan
+             (128, 0, 255, 0),  # Purple
+             (255, 255, 0, 0),  # Yellow
+             (0, 0, 255, 0),    # Blue
+             (255, 128, 0, 0),  # Orange
+             (255, 0, 255, 0),  # Pink
+             (0, 255, 0, 0)     # Green
+        ]
+        
+        # Cycle colours every 2 seconds
+        t = (time.time() // 2) % len(colours)
         
         for row, columns in enumerate(arr):
+            # Select a colour based on row number and t, colours ascending
+            rgbw = colours[(row + t) % len(colours)]
             for col, on in enumerate(columns):
                 if not on: continue
-                x = col / ncol * cos(theta) - row / nrow * sin(theta) + 1
-                y = col / ncol * sin(theta) + row / nrow * cos(theta) + 1
-                rgb = rgb_full_value(
-                    wave_r * x + (1-wave_r) * y,
-                    wave_g * x + (1-wave_g) * y,
-                    wave_b * x + (1-wave_b) * y
-                )
-                rgbw = (rgb[0], rgb[1], rgb[2], 0)
                 arr_rgbw[row][col] = rgbw
         return arr_rgbw
-
-
+    
+    def effect_love(self, arr):
+        pass
+    
+    def effect_christmas(self, arr):
+        return self.effect_hour_min(arr, (255, 0, 0, 0), (0, 255, 0, 0))
+    
+    def effect_celebration(self, arr):
+        pass
+            
 ########
 # MAIN #
 ########
@@ -359,7 +421,8 @@ if __name__ == "__main__":
     )
 
     while True:
-#         clockface.demo()
+        # Uncomment to put in demo mode
+        # clockface.demo()
         
         # Power
         if not sw_power.update():
