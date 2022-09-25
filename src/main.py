@@ -5,6 +5,7 @@ from math import sin, cos, pi
 from buttoninput import ButtonInput
 from neopixel import Neopixel
 from rv3028 import RV3028
+from schedule import SCHEDULE
 
 #############
 # CONSTANTS #
@@ -181,8 +182,33 @@ class ClockFace:
             self.arr[pos[0]][pos[1]] = True
                 
     def show(self):
-        arr_rgbw = self.effects[self.effect_idx](self.arr)
+        """
+        Apply effects then write to LEDs.
+        """
+        effect_function = self.effects[self.effect_idx]
         
+        # Check schedule if any apply
+        curr_dtt = self.internal_rtc.datetime()[0:7]  # remove subsecond
+        for schedule_dtt, effect_func_str in SCHEDULE:
+            # Match this schedule entry against the current time
+            match = True
+            for curr_val, sched_val in zip(curr_dtt, schedule_dtt):
+                # None is a wildcard, always matches
+                if sched_val is None: continue
+                if curr_val != sched_val:
+                    match = False
+                    break
+            if match:
+                # Get the effect function object from the schedule string
+                effect_function = eval(
+                    'self.' + effect_func_str,
+                    {'self': self}
+                )
+        
+        # Run the effect function to get colours
+        arr_rgbw = effect_function(self.arr)
+        
+        # Write RGBW values to the LED strip
         for row, columns in enumerate(arr_rgbw):
             for col, rgbw in enumerate(columns):
                 indices = LED_POSITIONS[row][col]
