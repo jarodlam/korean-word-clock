@@ -21,7 +21,7 @@ STATES = {
     "네시": [(0,4), (2,4)],
     "다섯시": [(0,2), (1,2), (2,4)],
     "여섯시": [(1,1), (1,2), (2,4)],
-    "일곱시": [(1,3), (1,3), (2,4)],
+    "일곱시": [(1,3), (1,4), (2,4)],
     "여덟시": [(2,0), (2,1), (2,4)],
     "아홉시": [(2,2), (2,3), (2,4)],
     "열시": [(0,0), (2,4)],
@@ -29,7 +29,7 @@ STATES = {
     "열두시": [(0,0), (1,0), (2,4)],
     "자정": [(3,0), (3,1)],
     "정오": [(3,1), (4,1)],
-    "오": [(4,3)],
+    "오분": [(4,3), (4,4)],
     "십분": [(3,4), (4,4)],
     "십오분": [(4,2), (4,3), (4,4)],
     "이십분": [(3,2), (4,2), (4,4)],
@@ -78,24 +78,68 @@ PIN_SW_BRIGHTNESS = 14
 PIN_SW_MODE = 15
 DEBOUNCE_MS = 50
 FAST_FORWARD_MS = 1000
-RTC_I2C_ADDR = 0x52
 
 
 #########################
 # CLASSES AND FUNCTIONS #
 #########################
 
-"""
-Simple polling button handler.
-"""
 class ButtonInput:
     
-    def __init__(self, pin_no, callback=None):
+    def __init__(
+            self,
+            pin_no,
+            callback=None,
+            ff_threshold_ms=None,
+            ff_interval_ms=200
+        ):
+        """
+        Simple polling button controller.
+        
+        :param int pin_no: GPIO pin the button is connected to.
+        :param function callback: Callback function to run on button press.
+        :param int ff_threshold_ms: How long to wait before fast-forwarding.
+        :param int ff_interval_ms: How often to trigger fast-forwarding.
+        """
         self.pin = Pin(pin_no, Pin.IN)
         self.callback = callback
-        self.previous_ticks = time.ticks_ms()
-        self.toggled_ticks = time.ticks_ms()
+        self.ff_threshold_ms = ff_threshold_ms
+        self.ff_interval_ms = ff_interval_ms
+        
+        # Value from the most recent button update
         self.previous_value = self.pin.value()
+        
+        # Time when previous_value was read
+        self.previous_ticks = time.ticks_ms()
+        
+        # Time when previous_value last changed
+        self.toggle_ticks = time.ticks_ms()
+        
+    def handle_fast_forward(self, value):
+        # No callback configured and/or no fast forward configured
+        if self.callback is None or self.ff_threshold_ms is None:
+            return
+        
+        # Button not pressed
+        if not value:
+            self.previous_ff = -1
+            return
+        
+        time_pressed_ff = self.time_pressed() - self.ff_threshold_ms
+        
+        # Time threshold not reached
+        if time_pressed_ff < 0:
+            return
+        
+        time_round = time_pressed_ff - (time_pressed_ff % self.ff_interval_ms)
+        
+        # Already triggered this fast-forward interval
+        if time_round == self.previous_ff:
+            return
+        
+        # Trigger the callback
+        self.callback(value)
+        self.previous_ff = time_round
         
     def update(self):
         ticks = time.ticks_ms()
@@ -104,6 +148,7 @@ class ButtonInput:
         # No change
         if value == self.previous_value:
             self.previous_ticks = ticks
+            self.handle_fast_forward(value)
             return value
         
         # Debouncing, wait before read
@@ -114,8 +159,11 @@ class ButtonInput:
         self.previous_ticks = ticks
         self.toggle_ticks = ticks
         self.previous_value = value
+        
+        # Trigger callback on change
         if self.callback is not None:
             self.callback(value)
+        
         return value
         
     def time_pressed(self):
@@ -127,6 +175,34 @@ class ButtonInput:
 def callback_power(value):
     text = "on" if value else "off"
     print("Power {}".format(text))
+
+def callback_time_factory(rtc):
+    def callback_time(value):
+        if not value: return
+        y, mo, d, wd, h, m, _, _ = rtc.read_datetime()
+        
+        # Round down to nearest 5 minutes and add 5 minutes
+        m = m - (m % 5) + 5
+        
+        # Roll over to next hour
+        if m >= 60:
+            m = m % 60
+            h = (h + 1) % 24
+        
+        rtc.set_datetime((y, mo, d, wd, h, m, 0, 0))
+    return callback_time
+
+def callback_brightness_factory(clockface):
+    def callback_brightness(value):
+        if not value: return
+        clockface.cycle_brightness()
+    return callback_brightness
+
+def callback_mode_factory(clockface):
+    def callback_mode(value):
+        if not value: return
+        clockface.cycle_effect()
+    return callback_mode
 
 def rgb_full_value(r, g, b):
     """
@@ -174,8 +250,11 @@ class ClockFace:
         self.leds = leds
         self.nrow = nrow
         self.ncol = ncol
-        self.effect = self.effect_white
+        
         self.internal_rtc = RTC()
+        self.effects = [self.effect_white, self.effect_rainbow]
+        self.effect_idx = 0
+        
         self.clear()
     
     def set_state(self, state):
@@ -189,7 +268,7 @@ class ClockFace:
             self.arr[pos[0]][pos[1]] = True
                 
     def show(self):
-        arr_rgbw = self.effect(self.arr)
+        arr_rgbw = self.effects[self.effect_idx](self.arr)
         
         for row, columns in enumerate(arr_rgbw):
             for col, rgbw in enumerate(columns):
@@ -247,7 +326,18 @@ class ClockFace:
         if minute_10 >= 1:
             self.set_state(MINUTE_STATES[minute_10])
         if minute_1 >= 5:
-            self.set_state("오")
+            self.set_state("오분")
+    
+    def cycle_brightness(self):
+        b = self.leds.brightness()
+        b = b + 50
+        if b > 255: b = 55
+        self.leds.brightness(b)
+    
+    def cycle_effect(self):
+        self.effect_idx = self.effect_idx + 1
+        if self.effect_idx >= len(self.effects):
+            self.effect_idx = 0
 
     def demo(self):
         """
@@ -305,23 +395,38 @@ class ClockFace:
 ########
 
 if __name__ == "__main__":
-    leds = Neopixel(NUM_LEDS, 0, PIN_LED, "GRBW")
-    clockface = ClockFace(leds, NROW, NCOL)
+    # Set up objects
+    clockface = ClockFace(Neopixel(NUM_LEDS, 0, PIN_LED, "GRBW"), NROW, NCOL)
     rtc = RV3028(pin_sda=PIN_SDA, pin_scl=PIN_SCL)
-    sw_power = ButtonInput(PIN_SW_POWER, callback_power)
-    sw_time = ButtonInput(PIN_SW_TIME)
-    sw_brightness = ButtonInput(PIN_SW_BRIGHTNESS)
-    sw_mode = ButtonInput(PIN_SW_MODE)
+    sw_power = ButtonInput(
+        PIN_SW_POWER,
+        callback_power
+    )
+    sw_time = ButtonInput(
+        PIN_SW_TIME,
+        callback_time_factory(rtc),
+        FAST_FORWARD_MS,
+        100
+    )
+    sw_brightness = ButtonInput(
+        PIN_SW_BRIGHTNESS,
+        callback_brightness_factory(clockface),
+        FAST_FORWARD_MS,
+        500
+    )
+    sw_mode = ButtonInput(
+        PIN_SW_MODE,
+        callback_mode_factory(clockface)
+    )
 
     while True:
-        clockface.demo()
-        
+#         clockface.demo()
         
         # Power
         if not sw_power.update():
-            leds.clear()
-            leds.show()
-            time.sleep_ms(10)
+            clockface.clear()
+            clockface.show()
+            time.sleep(1)
             continue
         
         # Update buttons
@@ -329,16 +434,7 @@ if __name__ == "__main__":
         sw_brightness.update()
         sw_mode.update()
         
-        if sw_time.time_pressed() > FAST_FORWARD_MS:
-            print("Time")
-        
-        if sw_brightness.time_pressed() > FAST_FORWARD_MS:
-            print("Brightness")
-        
-        if sw_mode.time_pressed() > FAST_FORWARD_MS:
-            print("Mode")
-        
-        # Read system time
+        # Update system time from external RTC
         rtc.read_to_systime()
         
         # Update display
