@@ -1,6 +1,6 @@
 from machine import Pin, RTC
 import time
-from math import sin, cos, pi
+from math import sin, cos, pi, floor, ceil
 
 from buttoninput import ButtonInput
 from neopixel import Neopixel
@@ -80,6 +80,8 @@ PIN_SW_TIME = 13
 PIN_SW_BRIGHTNESS = 14
 PIN_SW_MODE = 15
 FAST_FORWARD_MS = 1000
+RTC_EEADDR_EFFECT = 0x00
+RTC_EEADDR_BRIGHTNESS = 0x01
 
 
 #########################
@@ -89,6 +91,7 @@ FAST_FORWARD_MS = 1000
 def callback_power(value):
     text = "on" if value else "off"
     print("Power {}".format(text))
+
 
 def callback_time_factory(rtc):
     def callback_time(value):
@@ -106,17 +109,22 @@ def callback_time_factory(rtc):
         rtc.set_datetime((y, mo, d, wd, h, m, 0, 0))
     return callback_time
 
-def callback_brightness_factory(clockface):
+
+def callback_brightness_factory(clockface, rtc):
     def callback_brightness(value):
         if not value: return
-        clockface.cycle_brightness()
+        brightness = clockface.cycle_brightness()
+        rtc.eeprom_write(RTC_EEADDR_BRIGHTNESS, brightness)
     return callback_brightness
 
-def callback_mode_factory(clockface):
+
+def callback_mode_factory(clockface, rtc):
     def callback_mode(value):
         if not value: return
-        clockface.cycle_effect()
+        effect_idx = clockface.cycle_effect()
+        rtc.eeprom_write(RTC_EEADDR_EFFECT, effect_idx)
     return callback_mode
+
 
 def rgb_to_hsv(r, g, b):
     """
@@ -141,6 +149,7 @@ def rgb_to_hsv(r, g, b):
         s = c / v
     return h, s, v
 
+
 def hsv_to_rgb(h, s, v):
     """
     Convert an HSV colour to RGB.
@@ -159,6 +168,7 @@ def hsv_to_rgb(h, s, v):
     rgb = (rgb[0] + m) * 255, (rgb[1] + m) * 255, (rgb[2] + m) * 255
     return round(rgb[0]), round(rgb[1]), round(rgb[2])
 
+
 def rgb_full_value(r, g, b):
     """
     Convert an RGB colour to HSV, set V to 100%, then convert back.
@@ -173,18 +183,35 @@ def rgb_full_value(r, g, b):
     
     # Convert back to RGB
     return hsv_to_rgb(h, s, v)
+
+
+def get_effect_from_rtc(rtc):
+    """
+    Get the persistent stored effect index from the external RTC EEPROM.
+    """
+    return rtc.eeprom_read(0x00)[0]
+
+
+def set_effect_to_rtc(rtc, effect_idx):
+    """
+    Set the persistent stored effect index to the external RTC EEPROM.
+    """
+    rtc.eeprom_write(0x00, effect_idx)
     
 
 class ClockFace:
     
-    def __init__(self, leds, nrow, ncol):
+    def __init__(self, leds, nrow, ncol, effect_idx=0, brightness=255):
         self.leds = leds
         self.nrow = nrow
         self.ncol = ncol
+        self.effect_idx = effect_idx
+        self.leds.brightness(brightness)
         
         self.internal_rtc = RTC()
         self.effects = [self.effect_white, self.effect_rainbow]
-        self.effect_idx = 0
+        if self.effect_idx > len(self.effects): self.effect_idx = 0
+        self.prev_time = 0
         
         self.clear()
     
@@ -202,6 +229,10 @@ class ClockFace:
         """
         Apply effects then write to LEDs.
         """
+        # Only update once per second
+        if time.time() == self.prev_time: return
+        self.prev_time = time.time()
+        
         effect_function = self.effects[self.effect_idx]
         
         # Check schedule if any apply
@@ -289,11 +320,15 @@ class ClockFace:
         b = b + 50
         if b > 255: b = 55
         self.leds.brightness(b)
+        self.prev_time = 0  # Force update
+        return b
     
     def cycle_effect(self):
         self.effect_idx = self.effect_idx + 1
         if self.effect_idx >= len(self.effects):
             self.effect_idx = 0
+        self.prev_time = 0  # Force update
+        return self.effect_idx
 
     def demo(self):
         """
@@ -316,7 +351,7 @@ class ClockFace:
             ['h', 'h', 'h', 'h', 'h'], 
             ['h', 'h', 'h', 'h', 'h'],
             ['h', 'h', 'm', 'm', 'm'],
-            ['m', 'h', 'm', 'm', 'm']
+            ['m', 'm', 'm', 'm', 'm']
         ]
         
         for row, columns in enumerate(arr):
@@ -335,14 +370,13 @@ class ClockFace:
         for row, columns in enumerate(arr):
             for col, on in enumerate(columns):
                 if not on: continue
-                arr_rgbw[row][col] = (0, 0, 0, 255)
+                arr_rgbw[row][col] = (255, 255, 255, 255)
         return arr_rgbw
     
     def effect_rainbow(self, arr):
         arr_rgbw = [[(0, 0, 0, 0) for _ in row] for row in arr]
         
-        #period = 10_000
-        period = 60
+        period = 1_000
         t = time.time() % period
         
         hue_h = (t / period * 360) % 360
@@ -367,7 +401,7 @@ class ClockFace:
              (255, 255, 0, 0),  # Yellow
              (0, 0, 255, 0),    # Blue
              (255, 128, 0, 0),  # Orange
-             (255, 0, 255, 0),  # Pink
+             (255, 0, 255, 0),  # Magenta
              (0, 255, 0, 0)     # Green
         ]
         
@@ -383,13 +417,47 @@ class ClockFace:
         return arr_rgbw
     
     def effect_love(self, arr):
-        pass
+        """
+        A colour effect that cycles between love-themed colours.
+        """
+        # Colours to cycle
+        colours = [
+            (255, 0, 0, 0),    # Red
+            (255, 128, 0, 0),  # Orange
+            (255, 0, 255, 0)   # Magenta
+        ]
+        
+        # t is a float on interval [0, len(colours))
+        period = 120
+        t = (time.time() % period) / period * len(colours)
+        
+        # Colours for this cycle
+        def colour_from_t(t):
+            colour1 = colours[floor(t)]
+            colour2 = colours[ceil(t) % len(colours)]
+            alpha = t % 1
+            return (
+                colour1[0] + (colour2[0] - colour1[0]) * alpha,
+                colour1[1] + (colour2[1] - colour1[1]) * alpha,
+                colour1[2] + (colour2[2] - colour1[2]) * alpha,
+                colour1[3] + (colour2[3] - colour1[3]) * alpha
+            )
+        rgbw_h = colour_from_t(t)
+        rgbw_m = colour_from_t((t + 1) % len(colours))  # offset by 1
+        
+        return self.effect_hour_min(arr, rgbw_h, rgbw_m)
     
     def effect_christmas(self, arr):
         return self.effect_hour_min(arr, (255, 0, 0, 0), (0, 255, 0, 0))
     
     def effect_celebration(self, arr):
-        pass
+        h = (time.time() * 32) % 360
+        return self.effect_hour_min(
+            arr,
+            hsv_to_rgb(h, 1, 1) + (0,),
+            (255, 255, 255, 255)
+        )
+
             
 ########
 # MAIN #
@@ -397,8 +465,14 @@ class ClockFace:
 
 if __name__ == "__main__":
     # Set up objects
-    clockface = ClockFace(Neopixel(NUM_LEDS, 0, PIN_LED, "GRBW"), NROW, NCOL)
     rtc = RV3028(pin_sda=PIN_SDA, pin_scl=PIN_SCL)
+    clockface = ClockFace(
+        Neopixel(NUM_LEDS, 0, PIN_LED, "GRBW"),
+        NROW,
+        NCOL,
+        effect_idx=rtc.eeprom_read(RTC_EEADDR_EFFECT)[0],
+        brightness=rtc.eeprom_read(RTC_EEADDR_BRIGHTNESS)[0]
+    )
     sw_power = ButtonInput(
         PIN_SW_POWER,
         callback_power
@@ -411,13 +485,13 @@ if __name__ == "__main__":
     )
     sw_brightness = ButtonInput(
         PIN_SW_BRIGHTNESS,
-        callback_brightness_factory(clockface),
+        callback_brightness_factory(clockface, rtc),
         FAST_FORWARD_MS,
         500
     )
     sw_mode = ButtonInput(
         PIN_SW_MODE,
-        callback_mode_factory(clockface)
+        callback_mode_factory(clockface, rtc)
     )
 
     while True:
