@@ -75,7 +75,7 @@ PIN_LED = 28
 PIN_SDA = 20
 PIN_SCL = 21
 PIN_RTC_INT = 22
-PIN_SW_POWER = 26
+PIN_SW_DST = 26
 PIN_SW_TIME = 13
 PIN_SW_BRIGHTNESS = 14
 PIN_SW_MODE = 15
@@ -87,11 +87,6 @@ RTC_EEADDR_BRIGHTNESS = 0x01
 #########################
 # CLASSES AND FUNCTIONS #
 #########################
-
-def callback_power(value):
-    text = "on" if value else "off"
-    print("Power {}".format(text))
-
 
 def callback_time_factory(rtc):
     def callback_time(value):
@@ -473,9 +468,8 @@ if __name__ == "__main__":
         effect_idx=rtc.eeprom_read(RTC_EEADDR_EFFECT)[0],
         brightness=rtc.eeprom_read(RTC_EEADDR_BRIGHTNESS)[0]
     )
-    sw_power = ButtonInput(
-        PIN_SW_POWER,
-        callback_power
+    sw_dst = ButtonInput(
+        PIN_SW_DST
     )
     sw_time = ButtonInput(
         PIN_SW_TIME,
@@ -498,20 +492,14 @@ if __name__ == "__main__":
         # Uncomment to put in demo mode
         # clockface.demo()
         
-        # Power
-        if not sw_power.update():
-            clockface.clear()
-            clockface.show()
-            time.sleep(1)
-            continue
-        
         # Update buttons
+        dst = sw_dst.update()
         sw_time.update()
         sw_brightness.update()
         sw_mode.update()
         
         # Update system time from external RTC
-        rtc.read_to_systime()
+        rtc.read_to_systime(dst=dst)
         
         # Update display
         clockface.update_time()

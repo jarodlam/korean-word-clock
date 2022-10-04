@@ -1,5 +1,5 @@
 from machine import Pin, I2C, RTC
-import time
+import utime
 
 DEFAULT_ADDRESS = 0x52
 
@@ -118,11 +118,26 @@ class RV3028:
         dttuple = self.internal_rtc.datetime()
         self.set_datetime(dttuple)
     
-    def read_to_systime(self):
+    def read_to_systime(self, dst=False):
         """
         Set the internal system time to the RV3028 time.
         """
         dttuple = self.read_datetime()
+        
+        # Daylight savings time, add 3600 seconds
+        if dst:
+            # utime and machine.RTC have different datetime tuple formats
+            udttuple = dttuple[0:3] + dttuple[4:7] + dttuple[3:4] + (0,)
+            print(udttuple)
+            epochtime = utime.mktime(udttuple)
+            print(epochtime)
+            epochtime = epochtime + 3600
+            print(epochtime)
+            udttuple = utime.gmtime(epochtime)
+            print(udttuple)
+            dttuple = udttuple[0:3] + udttuple[6:7] + udttuple[3:6] + (0,)
+            print(dttuple)
+        
         self.internal_rtc.datetime(dttuple)
     
     def i2c_read(self, register, num_bytes=1):
