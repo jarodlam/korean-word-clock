@@ -1,4 +1,5 @@
-# wip
+# Korean word clock
+A wall-mounted clock that reads out the current time in Korean.
 
 ## Bill of materials
 * Raspberry Pi Pico
