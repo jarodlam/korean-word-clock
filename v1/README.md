@@ -8,8 +8,6 @@ A wall-mounted clock that reads out the current time in Korean.
     * [Core Electronics](https://core-electronics.com.au/pimoroni-rv3028-real-time-clock-rtc-breakout.html)
 * Adafruit USB-C Breakout
     * [Core Electronics](https://core-electronics.com.au/adafruit-usb-c-breakout-board-downstream-connection.html)
-* 1000 uF electrolytic capacitor
-    * [Core Electronics](https://core-electronics.com.au/electrolytic-decoupling-capacitors-1000uf-25v.html)
 * 1N4733A 5.1 V Zener diode
     * [Core Electronics](https://core-electronics.com.au/zener-diode-5-1v-1w.html)
     * [Jaycar](https://www.jaycar.com.au/5-1v-1n4733-1-watt-zener-diode/p/ZR1403)
@@ -44,8 +42,6 @@ Korean | English
 사십분 | forty minutes
 오십분 | fifty minutes
 
-## Acknowledgements
+## Acknowledgements and references
 * [HangulClock](https://suapapa.github.io/site-hangulclocks/) by Homin Lee
-* [Raspberry Pi Pico EAGLE library](https://github.com/Lobo-T/RPI-Pico-Eagle-lib) by Lobo-T
-* [pi_pico_neopixel](https://github.com/blaz-r/pi_pico_neopixel) MicroPython library by Blaž Rolih
-* [rv3028-python](https://github.com/pimoroni/rv3028-python) MicroPython library by Pimoroni
+* [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel) by Adafruit
