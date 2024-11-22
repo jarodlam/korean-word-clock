@@ -8,13 +8,19 @@ Change log from v1:
 ## Bill of materials
 * SparkFun Qwiic Pro Micro
     * [Core Electronics](https://core-electronics.com.au/sparkfun-qwiic-pro-micro-usb-c-atmega32u4.html)
+    * [Mouser](https://au.mouser.com/ProductDetail/SparkFun/DEV-15795?qs=vHuUswq2%252BszUNhUhTg0rsg%3D%3D)
 * Pimoroni RV3028 Breakout
     * [Core Electronics](https://core-electronics.com.au/pimoroni-rv3028-real-time-clock-rtc-breakout.html)
+    * [Mouser](https://au.mouser.com/ProductDetail/Pimoroni/PIM449?qs=GedFDFLaBXE4W0MVwPUjCA%3D%3D)
 * LED 3-pin JST-SM pigtail connectors
     * [Core Electronics](https://core-electronics.com.au/led-strip-pigtail-connector-3-pin.html)
-* 12mm momentary push button
+    * [Mouser](https://au.mouser.com/ProductDetail/Adafruit/1663?qs=GURawfaeGuBbzkAfeSrhnA%3D%3D)
+* 12mm momentary push buttons
     * [Core Electronics](https://core-electronics.com.au/momentary-push-button-switch-12mm-square.html)
+    * [Mouser](https://au.mouser.com/ProductDetail/SparkFun/COM-09190?qs=WyAARYrbSnYmfgv9mXV0oQ%3D%3D)
     * [Jaycar](https://www.jaycar.com.au/spst-pcb-mount-tactile-switch-round/p/SP0609)
+* 4.7k resistors 1.6x3.6 mm
+    * [Mouser](https://au.mouser.com/ProductDetail/Vishay-Beyschlag/MBA02040C4701FC100?qs=sGAEpiMZZMtlubZbdhIBIBVk1FrbPqRGENggezJswok%3D)
 
 ## Translations
 Korean | English
