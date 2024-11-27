@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "SparkFun-Board")(type "KiCad")(uri "${KIPRJMOD}/SparkFun-Board.kicad_sym")(options "")(descr ""))
   (lib (name "SparkFun-Switch")(type "KiCad")(uri "${KIPRJMOD}/SparkFun-Switch.pretty/SparkFun-Switch.kicad_sym")(options "")(descr ""))
+  (lib (name "Pimoroni_RV3028")(type "KiCad")(uri "${KIPRJMOD}/Pimoroni_RV3028.pretty/Pimoroni_RV3028.kicad_sym")(options "")(descr ""))
 )
