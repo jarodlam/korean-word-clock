@@ -12,7 +12,7 @@ Change log from v1:
 * Pimoroni RV3028 Breakout
     * [Core Electronics](https://core-electronics.com.au/pimoroni-rv3028-real-time-clock-rtc-breakout.html)
     * [Mouser](https://au.mouser.com/ProductDetail/Pimoroni/PIM449?qs=GedFDFLaBXE4W0MVwPUjCA%3D%3D)
-* LED 3-pin JST-SM pigtail connectors
+* LED 3-pin JST-SM pigtail connector
     * [Core Electronics](https://core-electronics.com.au/led-strip-pigtail-connector-3-pin.html)
     * [Mouser](https://au.mouser.com/ProductDetail/Adafruit/1663?qs=GURawfaeGuBbzkAfeSrhnA%3D%3D)
 * 12mm momentary push buttons
@@ -20,7 +20,7 @@ Change log from v1:
     * [Mouser](https://au.mouser.com/ProductDetail/SparkFun/COM-09190?qs=WyAARYrbSnYmfgv9mXV0oQ%3D%3D)
     * [Jaycar](https://www.jaycar.com.au/spst-pcb-mount-tactile-switch-round/p/SP0609)
 * 4.7k resistors 1.6x3.6 mm
-    * [Mouser](https://au.mouser.com/ProductDetail/Vishay-Beyschlag/MBA02040C4701FC100?qs=sGAEpiMZZMtlubZbdhIBIBVk1FrbPqRGENggezJswok%3D)
+    * [Mouser](https://au.mouser.com/ProductDetail/YAGEO/MFR25SFTF52-4K7?qs=sGAEpiMZZMtlubZbdhIBIGLlr6zM66%2Fae5%252BGZlJpQLw%3D)
 
 ## Translations
 Korean | English
