@@ -44,6 +44,11 @@ public:
   RV3028(uint8_t addr = RV3028_DEFAULT_ADDRESS);
 
   /**
+   * Perform initial setup.
+   */
+  void begin();
+
+  /**
    * Read the current date and time from the RV3028.
    */
   DateTime readDateTime();
@@ -67,17 +72,17 @@ private:
   /**
    * Read multiple bytes from I2C registers.
    */
-  char* i2cRead(uint8_t reg, uint8_t numBytes);
+  void i2cRead(uint8_t reg, char* buf, size_t len);
 
   /**
    * Write a single byte to an I2C register.
    */
-  void i2cWrite(uint8_t reg, uint8_t data);
+  void i2cWrite(uint8_t reg, uint8_t value);
 
   /**
    * Write multiple bytes to I2C registers.
    */
-  void i2cWrite(uint8_t reg, char* data);
+  void i2cWrite(uint8_t reg, char* buf, size_t len);
   
   /**
    * Read a single bit from a register.

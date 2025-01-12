@@ -1,6 +1,8 @@
 #include "RV3028.h"
 
-RV3028::RV3028(uint8_t addr) : addr(addr) {
+RV3028::RV3028(uint8_t addr) : addr(addr) {}
+
+void RV3028::begin() {
   Wire.begin();
   setBatterySwitchoverMode(RV3028_DIRECT_SWITCHING_MODE);
 }
@@ -16,7 +18,8 @@ DateTime RV3028::readDateTime() {
   0x05: month
   0x06: year
   */
-  char* encoded = i2cRead(RV3028_REG_SECONDS, 7);
+  char encoded[7] = {0};
+  i2cRead(RV3028_REG_SECONDS, encoded, 7);
 
   // Decode each value from BCD to regular int
   uint8_t decoded[7];
@@ -57,40 +60,47 @@ void RV3028::setDateTime(DateTime dt) {
   0x05: month
   0x06: year
   */
-  i2cWrite(RV3028_REG_SECONDS, encoded);
+  i2cWrite(RV3028_REG_SECONDS, encoded, 7);
 }
 
 uint8_t RV3028::i2cRead(uint8_t reg) {
-  return (uint8_t)(i2cRead(reg, 1)[0]);
-}
-
-char* RV3028::i2cRead(uint8_t reg, uint8_t numBytes) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
   Wire.endTransmission(false);
 
-  Wire.requestFrom(addr, numBytes);
-  char buf[UINT8_MAX + 1] = {0};
-  for (int i = 0; i < UINT8_MAX; i++) {
+  Wire.requestFrom(addr, (uint8_t)1);
+  if (Wire.available()) {
+    return Wire.read();
+  } else {
+    return 0;
+  }
+}
+
+void RV3028::i2cRead(uint8_t reg, char* buf, size_t len) {
+  Wire.beginTransmission(addr);
+  Wire.write(reg);
+  Wire.endTransmission(false);
+
+  Wire.requestFrom(addr, len);
+  for (int i = 0; i < len; i++) {
     if (Wire.available() <= 0) {
       break;
     }
     buf[i] = Wire.read();
   }
-  return buf;
 }
 
-void RV3028::i2cWrite(uint8_t reg, uint8_t data) {
+void RV3028::i2cWrite(uint8_t reg, uint8_t value) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
-  Wire.write(data);
+  Wire.write(value);
   Wire.endTransmission();
 }
 
-void RV3028::i2cWrite(uint8_t reg, char* data) {
+void RV3028::i2cWrite(uint8_t reg, char* buf, size_t len) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
-  Wire.write(data, strlen(data));
+  Wire.write(buf, len);
   Wire.endTransmission();
 }
 
@@ -129,7 +139,7 @@ uint8_t RV3028::eepromRead(uint8_t eepromAddr) {
   i2cWrite(RV3028_REG_EECMD, (uint8_t)0x00);
   i2cWrite(RV3028_REG_EECMD, (uint8_t)0x22);
   eepromWaitBusy();
-  uint8_t value = i2cRead(RV3028_REG_EEDATA, 1)[0];
+  uint8_t value = i2cRead(RV3028_REG_EEDATA);
 
   /*
   When the transfer is finished (EEbusy = 0), 
@@ -173,6 +183,19 @@ void RV3028::eepromWrite(uint8_t eepromAddr, uint8_t value) {
   i2cWriteBit(RV3028_REG_CONTROL1, RV3028_POS_CONTROL1_EERD, false);
 }
 
+void RV3028::eepromWaitBusy() {
+  /*
+  Wait until the EEBUSY bit is cleared
+  before continuing an EEPROM read or write operation.
+  */
+  while (true) {
+    bool busy = i2cReadBit(RV3028_REG_STATUS, RV3028_POS_STATUS_EEBUSY);
+    if (!busy) {
+      break;
+    }
+  }
+}
+
 void RV3028::setBatterySwitchoverMode(uint8_t mode) {
   // Read the current value of the EEPROM Backup register
   uint8_t value = eepromRead(RV3028_REG_BACKUP);
@@ -194,4 +217,16 @@ void RV3028::setBatterySwitchoverMode(uint8_t mode) {
 
   // Write the updated config to the EEPROM Backup register
   eepromWrite(RV3028_REG_BACKUP, value);
+}
+
+uint8_t RV3028::encodeBcd(uint8_t normalInt) {
+  uint8_t lower = normalInt % 10;
+  uint8_t upper = (normalInt / 10) % 10;
+  return lower + (upper << 4);
+}
+
+uint8_t RV3028::decodeBcd(uint8_t bcdInt) {
+  uint8_t lower = bcdInt & 0x0F;
+  uint8_t upper = (bcdInt & 0xF0) >> 4;
+  return lower + (upper * 10);
 }
