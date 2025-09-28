@@ -15,7 +15,7 @@ void Button::update() {
 
   // Debounce
   unsigned long currentMillis = millis();
-  if (currentMillis < prevMillis) {  // millis() overflow
+  if (currentMillis < prevMillis) { // millis() overflow
     prevMillis = 0;
   }
   if ((currentMillis - prevMillis) < BUTTON_DEBOUNCE_DELAY) {

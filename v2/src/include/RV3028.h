@@ -73,7 +73,7 @@ private:
   /**
    * Read multiple bytes from I2C registers.
    */
-  void i2cRead(uint8_t reg, uint8_t* buf, size_t len);
+  void i2cRead(uint8_t reg, uint8_t *buf, size_t len);
 
   /**
    * Write a single byte to an I2C register.
@@ -83,14 +83,14 @@ private:
   /**
    * Write multiple bytes to I2C registers.
    */
-  void i2cWrite(uint8_t reg, uint8_t* buf, size_t len);
-  
+  void i2cWrite(uint8_t reg, uint8_t *buf, size_t len);
+
   /**
    * Read a single bit from a register.
    * Used for reading status bits.
    */
   bool i2cReadBit(uint8_t reg, uint8_t bitPos);
-  
+
   /**
    * Write a single bit to a register while keeping all other bits the same.
    * Used for changing config bits.
@@ -108,7 +108,8 @@ private:
   void eepromWrite(uint8_t eepromAddr, uint8_t value);
 
   /**
-   * Wait until the EEBusy bit is cleared before continuing an EEPROM read or write.
+   * Wait until the EEBusy bit is cleared before continuing an EEPROM read or
+   * write.
    */
   void eepromWaitBusy();
 
@@ -118,9 +119,9 @@ private:
    *
    * Can supply the following values:
    * - RV3028_SWITCHOVER_DISABLED: Switchover disabled.
-   * - RV3028_DIRECT_SWITCHING_MODE: Switchover when V_DD < V_BACKUP. 
+   * - RV3028_DIRECT_SWITCHING_MODE: Switchover when V_DD < V_BACKUP.
        For when V_DD is significantly higher than V_BACKUP (e.g. 5 V).
-   * - RV3028_LEVEL_SWITCHING_MODE: Switchover when V_DD < 2.0 V. 
+   * - RV3028_LEVEL_SWITCHING_MODE: Switchover when V_DD < 2.0 V.
        For when V_DD is around the same as V_BACKUP (e.g. 3.5 V).
    */
   void setBatterySwitchoverMode(uint8_t mode);

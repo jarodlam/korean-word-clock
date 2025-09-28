@@ -1,12 +1,12 @@
-#include <Adafruit_NeoPixel.h>
 #include "Button.h"
 #include "LEDMatrix.h"
 #include "RV3028.h"
+#include <Adafruit_NeoPixel.h>
 
 /*
  * Uncomment to set the time.
  * After setting time, comment out and re-upload.
- * 
+ *
  * Format is:
  *   second, minute, hour (24h), weekday (0=Sunday), day, month, year
  */
@@ -30,7 +30,8 @@
  * Globals
  */
 // Adafruit_NeoPixel leds{MATRIX_COUNT, PIN_LEDDATA, NEO_GRBW + NEO_KHZ800};
-LEDMatrix matrix{MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LEDS_PER_CELL, PIN_LEDDATA};
+LEDMatrix matrix{MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LEDS_PER_CELL,
+                 PIN_LEDDATA};
 uint8_t buffer[MATRIX_WIDTH][MATRIX_HEIGHT][4];
 RV3028 rtc{};
 // KoreanController controller{};
@@ -43,11 +44,12 @@ void setup() {
   matrix.begin();
   matrix.setBrightness(255);
 
-  #ifdef SET_TIME
+#ifdef SET_TIME
   DateTime newTime = DateTime{SET_TIME};
   rtc.setDateTime(newTime);
-  while (true) {}  // Disable device in set time mode
-  #endif
+  while (true) {
+  } // Disable device in set time mode
+#endif
 }
 
 void loop() {
@@ -61,5 +63,4 @@ void loop() {
       delay(100);
     }
   }
-
 }

@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-#define BUTTON_DEBOUNCE_DELAY 50  // milliseconds
+#define BUTTON_DEBOUNCE_DELAY 50 // milliseconds
 
 class Button {
 public:

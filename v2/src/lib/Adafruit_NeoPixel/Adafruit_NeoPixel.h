@@ -55,10 +55,10 @@
 #endif
 
 #if defined(ARDUINO_ARCH_RP2040)
-#include <stdlib.h>
-#include "hardware/pio.h"
 #include "hardware/clocks.h"
+#include "hardware/pio.h"
 #include "rp2040_pio.h"
+#include <stdlib.h>
 #endif
 
 // The order of primary colors in the NeoPixel data stream can vary among
@@ -384,17 +384,17 @@ public:
 
 private:
 #if defined(ARDUINO_ARCH_RP2040)
-  bool   rp2040claimPIO(void);
-  void   rp2040releasePIO(void);
-  void   rp2040Show(uint8_t *pixels, uint32_t numBytes);
-  PIO    pio = NULL;
-  uint   pio_sm = -1;
-  uint   pio_program_offset = 0;
+  bool rp2040claimPIO(void);
+  void rp2040releasePIO(void);
+  void rp2040Show(uint8_t *pixels, uint32_t numBytes);
+  PIO pio = NULL;
+  uint pio_sm = -1;
+  uint pio_program_offset = 0;
 #endif
 
 protected:
 #ifdef NEO_KHZ400 // If 400 KHz NeoPixel support enabled...
-  bool is800KHz; ///< true if 800 KHz pixels
+  bool is800KHz;  ///< true if 800 KHz pixels
 #endif
 
   bool begun;         ///< true if begin() previously called successfully
@@ -414,10 +414,8 @@ protected:
   uint8_t pinMask;        ///< Output PORT bitmask
 #endif
 
-#if defined(ARDUINO_ARCH_STM32) || \
-    defined(ARDUINO_ARCH_ARDUINO_CORE_STM32) || \
-    defined(ARDUINO_ARCH_CH32) || \
-    defined(_PY32_DEF_)
+#if defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_ARDUINO_CORE_STM32) || \
+    defined(ARDUINO_ARCH_CH32) || defined(_PY32_DEF_)
   GPIO_TypeDef *gpioPort; ///< Output GPIO PORT
   uint32_t gpioPin;       ///< Output GPIO PIN
 #endif
@@ -425,7 +423,6 @@ protected:
 #if defined(TARGET_GIGA) || defined(TARGET_M4)
   mbed::DigitalInOut *gpio;
 #endif
-
 };
 
 #endif // ADAFRUIT_NEOPIXEL_H

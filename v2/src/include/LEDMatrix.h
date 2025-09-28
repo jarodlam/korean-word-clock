@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
+#include <Arduino.h>
 
 /**
  * Controls an RGBW SK6812 matrix.
@@ -24,13 +24,14 @@ public:
    * Set LEDs for a cell at a specific coordinate.
    * Coordinates are 0-indexed with (0,0) at bottom-left.
    */
-  void setCell(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t w);
+  void setCell(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b,
+               uint8_t w);
 
 private:
   uint8_t width;
   uint8_t height;
   uint8_t ledsPerCell;
-  Adafruit_NeoPixel* neopixel;
+  Adafruit_NeoPixel *neopixel;
 
   uint16_t numLeds();
 };

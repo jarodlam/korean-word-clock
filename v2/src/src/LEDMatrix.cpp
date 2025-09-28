@@ -1,6 +1,7 @@
 #include "LEDMatrix.h"
 
-LEDMatrix::LEDMatrix(uint8_t width, uint8_t height, uint8_t ledsPerCell, int16_t pin) {
+LEDMatrix::LEDMatrix(uint8_t width, uint8_t height, uint8_t ledsPerCell,
+                     int16_t pin) {
   this->width = width;
   this->height = height;
   this->ledsPerCell = ledsPerCell;
@@ -13,19 +14,14 @@ void LEDMatrix::begin() {
   neopixel->show();
 }
 
-void LEDMatrix::show() {
-  return neopixel->show();
-}
+void LEDMatrix::show() { return neopixel->show(); }
 
-void LEDMatrix::clear() {
-  return neopixel->clear();
-}
+void LEDMatrix::clear() { return neopixel->clear(); }
 
-void LEDMatrix::setBrightness(uint8_t v) {
-  return neopixel->setBrightness(v);
-}
+void LEDMatrix::setBrightness(uint8_t v) { return neopixel->setBrightness(v); }
 
-void LEDMatrix::setCell(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t w) {
+void LEDMatrix::setCell(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b,
+                        uint8_t w) {
   Serial.println("setCell");
   // Determine cell position along LED strip
   uint16_t verticalOffset = y * width;
@@ -37,7 +33,7 @@ void LEDMatrix::setCell(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b, u
     // Odd row, right-to-left
     horizontalOffset = (width - 1) - x;
   }
-  uint16_t firstPos = (verticalOffset + horizontalOffset) * ledsPerCell; 
+  uint16_t firstPos = (verticalOffset + horizontalOffset) * ledsPerCell;
 
   // Set all leds
   for (uint8_t i = 0; i < ledsPerCell; i++) {
@@ -47,6 +43,4 @@ void LEDMatrix::setCell(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b, u
   }
 }
 
-uint16_t LEDMatrix::numLeds() {
-  return width * height * ledsPerCell;
-}
+uint16_t LEDMatrix::numLeds() { return width * height * ledsPerCell; }

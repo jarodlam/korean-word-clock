@@ -28,28 +28,24 @@ DateTime RV3028::readDateTime() {
   }
 
   return DateTime{
-    decoded[0],
-    decoded[1],
-    decoded[2],
-    decoded[3],
-    decoded[4],
-    decoded[5],
-    decoded[6] + (uint16_t)2000,  // only last two year digits are stored
+      decoded[0],
+      decoded[1],
+      decoded[2],
+      decoded[3],
+      decoded[4],
+      decoded[5],
+      decoded[6] + (uint16_t)2000, // only last two year digits are stored
   };
 }
 
 void RV3028::setDateTime(DateTime dt) {
   // Encode each value from regular int to BCD
   uint8_t encoded[7] = {
-    encodeBcd(dt.second),
-    encodeBcd(dt.minute),
-    encodeBcd(dt.hour),
-    encodeBcd(dt.weekday),
-    encodeBcd(dt.day),
-    encodeBcd(dt.month),
-    encodeBcd(dt.year % 100),
+      encodeBcd(dt.second),     encodeBcd(dt.minute), encodeBcd(dt.hour),
+      encodeBcd(dt.weekday),    encodeBcd(dt.day),    encodeBcd(dt.month),
+      encodeBcd(dt.year % 100),
   };
-  
+
   /*
   Write to the following registers:
   0x00: second
@@ -76,7 +72,7 @@ uint8_t RV3028::i2cRead(uint8_t reg) {
   }
 }
 
-void RV3028::i2cRead(uint8_t reg, uint8_t* buf, size_t len) {
+void RV3028::i2cRead(uint8_t reg, uint8_t *buf, size_t len) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
   Wire.endTransmission(false);
@@ -97,7 +93,7 @@ void RV3028::i2cWrite(uint8_t reg, uint8_t value) {
   Wire.endTransmission();
 }
 
-void RV3028::i2cWrite(uint8_t reg, uint8_t* buf, size_t len) {
+void RV3028::i2cWrite(uint8_t reg, uint8_t *buf, size_t len) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
   Wire.write(buf, len);
@@ -121,8 +117,8 @@ void RV3028::i2cWriteBit(uint8_t reg, uint8_t bitPos, bool bitVal) {
 
 uint8_t RV3028::eepromRead(uint8_t eepromAddr) {
   /*
-  Before starting to read a byte in the EEPROM, 
-  the auto refresh of the registers from the EEPROM has to be disabled 
+  Before starting to read a byte in the EEPROM,
+  the auto refresh of the registers from the EEPROM has to be disabled
   by writing 1 into the EERD control bit.
   */
   i2cWriteBit(RV3028_REG_CONTROL1, RV3028_POS_CONTROL1_EERD, true);
@@ -142,7 +138,7 @@ uint8_t RV3028::eepromRead(uint8_t eepromAddr) {
   uint8_t value = i2cRead(RV3028_REG_EEDATA);
 
   /*
-  When the transfer is finished (EEbusy = 0), 
+  When the transfer is finished (EEbusy = 0),
   the user can enable again the auto refresh of the registers
   by writing 0 into the EERD bit in the Control 1 register.
   */
@@ -154,8 +150,8 @@ uint8_t RV3028::eepromRead(uint8_t eepromAddr) {
 
 void RV3028::eepromWrite(uint8_t eepromAddr, uint8_t value) {
   /*
-  Before starting to change data stored in the EEPROM, 
-  the auto refresh of the registers from the EEPROM has to be disabled 
+  Before starting to change data stored in the EEPROM,
+  the auto refresh of the registers from the EEPROM has to be disabled
   by writing 1 into the EERD control bit.
   */
   i2cWriteBit(RV3028_REG_CONTROL1, RV3028_POS_CONTROL1_EERD, true);
@@ -163,11 +159,10 @@ void RV3028::eepromWrite(uint8_t eepromAddr, uint8_t value) {
 
   /*
   In order to write a single byte to the EEPROM,
-  the address to which the data must be written is entered in the EEADDR register
-  and the data to be written is entered in the EEDATA register,
-  then the command 00h is written in the EECMD register,
-  then a second command 21h is written in the EECMD register to start
-  the EEPROM write.
+  the address to which the data must be written is entered in the EEADDR
+  register and the data to be written is entered in the EEDATA register, then
+  the command 00h is written in the EECMD register, then a second command 21h is
+  written in the EECMD register to start the EEPROM write.
   */
   i2cWrite(RV3028_REG_EEADDR, eepromAddr);
   i2cWrite(RV3028_REG_EEDATA, value);
@@ -175,7 +170,7 @@ void RV3028::eepromWrite(uint8_t eepromAddr, uint8_t value) {
   i2cWrite(RV3028_REG_EECMD, (uint8_t)0x21);
 
   /*
-  When the transfer is finished (EEbusy = 0), 
+  When the transfer is finished (EEbusy = 0),
   the user can enable again the auto refresh of the registers
   by writing 0 into the EERD bit in the Control 1 register.
   */
@@ -201,11 +196,9 @@ void RV3028::setBatterySwitchoverMode(uint8_t mode) {
   uint8_t value = eepromRead(RV3028_REG_BACKUP);
 
   // Clear the BSM and FEDE (Fast Edge Detection Enable) bits
-  value = value & ~(
-    (1 << RV3028_POS_BACKUP_BSM) &
-    (1 << (RV3028_POS_BACKUP_BSM + 1)) &
-    (1 << RV3028_POS_BACKUP_FEDE)
-  );
+  value = value &
+          ~((1 << RV3028_POS_BACKUP_BSM) & (1 << (RV3028_POS_BACKUP_BSM + 1)) &
+            (1 << RV3028_POS_BACKUP_FEDE));
 
   // Write the BSM bits
   value = value | ((mode & 0x3) << RV3028_POS_BACKUP_BSM);
