@@ -18,7 +18,7 @@ DateTime RV3028::readDateTime() {
   0x05: month
   0x06: year
   */
-  char encoded[7] = {0};
+  uint8_t encoded[7] = {0};
   i2cRead(RV3028_REG_SECONDS, encoded, 7);
 
   // Decode each value from BCD to regular int
@@ -34,13 +34,13 @@ DateTime RV3028::readDateTime() {
     decoded[3],
     decoded[4],
     decoded[5],
-    decoded[6] + 2000,  // only last two year digits are stored
+    decoded[6] + (uint16_t)2000,  // only last two year digits are stored
   };
 }
 
 void RV3028::setDateTime(DateTime dt) {
   // Encode each value from regular int to BCD
-  char encoded[7] = {
+  uint8_t encoded[7] = {
     encodeBcd(dt.second),
     encodeBcd(dt.minute),
     encodeBcd(dt.hour),
@@ -76,13 +76,13 @@ uint8_t RV3028::i2cRead(uint8_t reg) {
   }
 }
 
-void RV3028::i2cRead(uint8_t reg, char* buf, size_t len) {
+void RV3028::i2cRead(uint8_t reg, uint8_t* buf, size_t len) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
   Wire.endTransmission(false);
 
   Wire.requestFrom(addr, len);
-  for (int i = 0; i < len; i++) {
+  for (uint16_t i = 0; i < len; i++) {
     if (Wire.available() <= 0) {
       break;
     }
@@ -97,7 +97,7 @@ void RV3028::i2cWrite(uint8_t reg, uint8_t value) {
   Wire.endTransmission();
 }
 
-void RV3028::i2cWrite(uint8_t reg, char* buf, size_t len) {
+void RV3028::i2cWrite(uint8_t reg, uint8_t* buf, size_t len) {
   Wire.beginTransmission(addr);
   Wire.write(reg);
   Wire.write(buf, len);

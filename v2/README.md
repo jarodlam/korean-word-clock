@@ -22,6 +22,31 @@ Change log from v1:
 * 4.7k resistors 1.6x3.6 mm
     * [Mouser](https://au.mouser.com/ProductDetail/YAGEO/MFR25SFTF52-4K7?qs=sGAEpiMZZMtlubZbdhIBIGLlr6zM66%2Fae5%252BGZlJpQLw%3D)
 
+## Software
+
+Requirements:
+
+- [PlatformIO](https://platformio.org/)
+
+Usage (run from `src/` directory with `platformio.ini`:
+
+```sh
+# Build
+$ pio run
+
+# Upload
+$ pio run --target upload
+
+# Generate clangd compile_commands.json for LSP
+$ pio run --target compiledb
+
+# Clean build files
+$ pio run --target clean
+
+# View serial monitor
+$ pio device monitor
+```
+
 ## Translations
 Korean | English
 ------ | -------

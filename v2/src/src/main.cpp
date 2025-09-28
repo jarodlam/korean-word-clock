@@ -33,7 +33,7 @@
 LEDMatrix matrix{MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LEDS_PER_CELL, PIN_LEDDATA};
 uint8_t buffer[MATRIX_WIDTH][MATRIX_HEIGHT][4];
 RV3028 rtc{};
-KoreanController controller{};
+// KoreanController controller{};
 
 void setup() {
   Serial.begin(9600);

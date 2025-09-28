@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <stdint.h>
 #include <string.h>
 
 // Default I2C address
@@ -72,7 +73,7 @@ private:
   /**
    * Read multiple bytes from I2C registers.
    */
-  void i2cRead(uint8_t reg, char* buf, size_t len);
+  void i2cRead(uint8_t reg, uint8_t* buf, size_t len);
 
   /**
    * Write a single byte to an I2C register.
@@ -82,7 +83,7 @@ private:
   /**
    * Write multiple bytes to I2C registers.
    */
-  void i2cWrite(uint8_t reg, char* buf, size_t len);
+  void i2cWrite(uint8_t reg, uint8_t* buf, size_t len);
   
   /**
    * Read a single bit from a register.
