@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <stdint.h>
 #include <string.h>
+#include "Clock.h"
 
 // Default I2C address
 #define RV3028_DEFAULT_ADDRESS 0x52
@@ -30,19 +31,9 @@
 #define RV3028_DIRECT_SWITCHING_MODE 0x01
 #define RV3028_LEVEL_SWITCHING_MODE 0x02
 
-struct DateTime {
-  uint8_t second;
-  uint8_t minute;
-  uint8_t hour;
-  uint8_t weekday;
-  uint8_t day;
-  uint8_t month;
-  uint16_t year;
-};
-
-class RV3028 {
+class Rv3028Clock : public Clock {
 public:
-  RV3028(uint8_t addr = RV3028_DEFAULT_ADDRESS);
+  Rv3028Clock(uint8_t addr = RV3028_DEFAULT_ADDRESS);
 
   /**
    * Perform initial setup.
@@ -57,7 +48,7 @@ public:
   /**
    * Set a new date and time on the RV3028.
    */
-  void setDateTime(DateTime dt);
+  void setDateTime(DateTime &dt);
 
 private:
   /**
