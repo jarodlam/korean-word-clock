@@ -1,7 +1,8 @@
-#include "Button.h"
-#include "LEDMatrix.h"
-#include "RV3028.h"
 #include <Adafruit_NeoPixel.h>
+
+#include "Button.h"
+#include "Sk6812LedMatrix.h"
+#include "Rv3028CLock.h"
 
 /*
  * Uncomment to set the time.

@@ -212,14 +212,3 @@ void RV3028::setBatterySwitchoverMode(uint8_t mode) {
   eepromWrite(RV3028_REG_BACKUP, value);
 }
 
-uint8_t RV3028::encodeBcd(uint8_t normalInt) {
-  uint8_t lower = normalInt % 10;
-  uint8_t upper = (normalInt / 10) % 10;
-  return lower + (upper << 4);
-}
-
-uint8_t RV3028::decodeBcd(uint8_t bcdInt) {
-  uint8_t lower = bcdInt & 0x0F;
-  uint8_t upper = (bcdInt & 0xF0) >> 4;
-  return lower + (upper * 10);
-}
