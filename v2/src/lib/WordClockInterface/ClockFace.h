@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#include <Clock.h>
+
 /**
  * Interface for controlling the word clock face.
  * A ClockFace translates the current time and settings into LED commands on the device.
@@ -9,13 +11,14 @@
 class ClockFace {
   /**
    * Write the current state to the LEDs.
+   * Takes into account internal state such as brightness and effects, if applicable.
    */
   virtual void show() {}
 
   /**
-   * Read the time and other settings and figure out which LEDs to turn on.
+   * Update the clock face with the given time.
    */
-  virtual void update() {}
+  virtual void update(DateTime& dt) {}
 
   /**
    * Cycle through brightness settings.
