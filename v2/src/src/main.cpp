@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "Sk6812LedMatrix.h"
 #include "Rv3028CLock.h"
+#include "KoreanClockFace.h"
 
 /*
  * Uncomment to set the time.
@@ -31,7 +32,7 @@
  * Globals
  */
 // Adafruit_NeoPixel leds{MATRIX_COUNT, PIN_LEDDATA, NEO_GRBW + NEO_KHZ800};
-LEDMatrix matrix{MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LEDS_PER_CELL,
+Sk6812LedMatrix matrix{MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LEDS_PER_CELL,
                  PIN_LEDDATA};
 uint8_t buffer[MATRIX_WIDTH][MATRIX_HEIGHT][4];
 RV3028 rtc{};

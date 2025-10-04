@@ -10,22 +10,22 @@ class ClockFace {
   /**
    * Write the current state to the LEDs.
    */
-  virtual void show();
+  virtual void show() {}
 
   /**
    * Read the time and other settings and figure out which LEDs to turn on.
    */
-  virtual void update();
+  virtual void update() {}
 
   /**
    * Cycle through brightness settings.
    * Returns the resulting brightness value.
    */
-  virtual uint8_t cycleBrightness();
+  virtual uint8_t cycleBrightness() { return 0; }
 
   /**
    * Cycle through effect settings.
    * Returns the resulting effect index.
    */
-  virtual uint8_t cycleEffect();
+  virtual uint8_t cycleEffect() { return 0; }
 };

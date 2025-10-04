@@ -26,25 +26,25 @@ public:
   /**
    * Initialise the hardware.
    */
-  virtual void begin();
+  virtual void begin() {}
 
   /**
    * Write the configuration to the LED matrix.
    */
-  virtual void show();
+  virtual void show() {}
 
   /**
    * Set all LEDs to off.
    */
-  virtual void clear();
+  virtual void clear() {}
 
   /**
    * Set global brightness for the LED strip.
    */
-  virtual void setBrightness(uint8_t brightness);
+  virtual void setBrightness(uint8_t brightness) {}
 
   /**
    * Set LEDs for a cell at a specific coordinate.
    */
-  virtual void setCell(LedPosition &pos, LedColor &color);
+  virtual void setCell(LedPosition &pos, LedColor &color) {}
 };

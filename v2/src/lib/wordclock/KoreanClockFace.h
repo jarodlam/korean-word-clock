@@ -1,11 +1,13 @@
 #pragma once
 
+#include <stddef.h>
+
 #include "Clock.h"
 #include "ClockFace.h"
 #include "LedMatrix.h"
 
-#define KOREAN_CLOCK_FACE_WIDTH 5;
-#define KOREAN_CLOCK_FACE_HEIGHT 5;
+#define KOREAN_CLOCK_FACE_WIDTH 5
+#define KOREAN_CLOCK_FACE_HEIGHT 5
 
 /**
  * A word comprises one or more cells on the clock face.
@@ -29,6 +31,8 @@ private:
   uint8_t brightness;
   uint8_t effectIdx;
   bool state[KOREAN_CLOCK_FACE_WIDTH][KOREAN_CLOCK_FACE_HEIGHT];
+  LedMatrix &ledMatrix;
+  Clock &clock;
 
   /**
    * Turns on a word.
@@ -36,3 +40,4 @@ private:
   template <size_t N>
   void setWord(const ClockWord<N>& word);
 };
+extern KoreanClockFace* __dummy_face;
