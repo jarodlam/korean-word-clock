@@ -42,7 +42,7 @@ constexpr ClockWord<2> WORD_MIDDAY = { { 3, 1 }, { 4, 1 } };             // ì •ì
  */
 class KoreanClockFace : public ClockFace {
 public:
-  KoreanClockFace(LedMatrix &ledMatrix, Clock &clock, uint8_t brightness = 255, uint8_t effectIdx = 0);
+  KoreanClockFace(LedMatrix &ledMatrix, uint8_t brightness = 255, uint8_t effectIdx = 0);
 
   void show();
   void update(DateTime &dt);
@@ -59,7 +59,6 @@ private:
   uint8_t _effectIdx;
   bool _state[KOREAN_CLOCK_FACE_WIDTH][KOREAN_CLOCK_FACE_HEIGHT];
   LedMatrix &_ledMatrix;
-  Clock &_clock;
 
   /**
    * Sets the entire _state array to false.
@@ -70,6 +69,9 @@ private:
    * Turns on a word.
    */
   template <size_t N>
-  void _setWord(const ClockWord<N>& word);
+  void _setWord(const ClockWord<N>& word) {
+    for (auto pos : word) {
+      _state[pos.x][pos.y] = true;
+    }
+  }
 };
-extern KoreanClockFace* __dummy_face;

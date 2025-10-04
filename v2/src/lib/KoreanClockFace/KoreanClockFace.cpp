@@ -2,8 +2,8 @@
 
 #include <stddef.h>
 
-KoreanClockFace::KoreanClockFace(LedMatrix &ledMatrix, Clock &clock, uint8_t brightness, uint8_t effectIdx)
-  : _brightness(brightness), _effectIdx(effectIdx), _ledMatrix(ledMatrix), _clock(clock) {
+KoreanClockFace::KoreanClockFace(LedMatrix &ledMatrix, uint8_t brightness, uint8_t effectIdx)
+  : _brightness(brightness), _effectIdx(effectIdx), _ledMatrix(ledMatrix) {
   _clear();
 }
 
@@ -97,4 +97,9 @@ void KoreanClockFace::_clear() {
       _state[x][y] = false;
     }
   }
+}
+ 
+// For testing only
+bool* KoreanClockFace::getState() {
+  return (bool*)_state;
 }
