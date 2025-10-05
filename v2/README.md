@@ -38,10 +38,13 @@ $ pio run
 $ pio run --target upload
 
 # Generate clangd compile_commands.json for LSP
-$ pio run --target compiledb
+$ pio run --target compiledb --environment sparkfun_promicro16
 
 # Clean build files
 $ pio run --target clean
+
+# Run local tests
+$ pio test --environment native
 
 # View serial monitor
 $ pio device monitor

@@ -1,5 +1,6 @@
 #include "KoreanClockFace.h"
 
+#include <stdint.h>
 #include <stddef.h>
 
 KoreanClockFace::KoreanClockFace(LedMatrix &ledMatrix, uint8_t brightness, uint8_t effectIdx)
@@ -7,16 +8,19 @@ KoreanClockFace::KoreanClockFace(LedMatrix &ledMatrix, uint8_t brightness, uint8
   _clear();
 }
 
+void KoreanClockFace::begin(uint8_t brightness, uint8_t effectIdx) {
+  _brightness = brightness;
+  _effectIdx = effectIdx;
+}
+
 void KoreanClockFace::show() {
   LedColor on = { 255, 255, 255, 255 };
-  LedColor off = { 0, 0, 0, 0 };
-  for (int x = 0; x < KOREAN_CLOCK_FACE_WIDTH; ++x) {
-    for (int y = 0; y < KOREAN_CLOCK_FACE_HEIGHT; ++y) {
-      LedPosition pos{ (uint8_t)x, (uint8_t)y };
+  _ledMatrix.clear();
+  for (uint8_t x = 0; x < KOREAN_CLOCK_FACE_WIDTH; ++x) {
+    for (uint8_t y = 0; y < KOREAN_CLOCK_FACE_HEIGHT; ++y) {
+      LedPosition pos{ x, y };
       if (_state[x][y]) {
         _ledMatrix.setCell(pos, on);
-      } else {
-        _ledMatrix.setCell(pos, off);
       }
     }
   }
@@ -98,8 +102,8 @@ void KoreanClockFace::_clear() {
     }
   }
 }
- 
+
 // For testing only
-bool* KoreanClockFace::getState() {
-  return (bool*)_state;
+bool *KoreanClockFace::getState() {
+  return (bool *)_state;
 }

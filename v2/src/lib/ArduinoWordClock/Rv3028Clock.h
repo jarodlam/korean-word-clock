@@ -31,9 +31,9 @@
 #define RV3028_DIRECT_SWITCHING_MODE 0x01
 #define RV3028_LEVEL_SWITCHING_MODE 0x02
 
-class RV3028 : public Clock {
+class Rv3028Clock : public Clock {
 public:
-  RV3028(uint8_t addr = RV3028_DEFAULT_ADDRESS);
+  Rv3028Clock(uint8_t addr = RV3028_DEFAULT_ADDRESS);
 
   /**
    * Perform initial setup.
@@ -48,7 +48,7 @@ public:
   /**
    * Set a new date and time on the RV3028.
    */
-  void setDateTime(DateTime dt);
+  void setDateTime(DateTime &dt);
 
 private:
   /**
