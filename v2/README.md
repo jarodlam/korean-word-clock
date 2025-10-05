@@ -35,16 +35,16 @@ Usage (run from `src/` directory with `platformio.ini`:
 $ pio run
 
 # Upload
-$ pio run --target upload
+$ pio run -t upload
 
 # Generate clangd compile_commands.json for LSP
-$ pio run --target compiledb --environment sparkfun_promicro16
+$ pio run -t compiledb -e sparkfun_promicro16
 
 # Clean build files
-$ pio run --target clean
+$ pio run -t clean
 
 # Run local tests
-$ pio test --environment native
+$ pio test -e native
 
 # View serial monitor
 $ pio device monitor

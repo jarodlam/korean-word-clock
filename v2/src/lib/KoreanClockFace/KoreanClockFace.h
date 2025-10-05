@@ -22,27 +22,27 @@ using ClockWord = LedPosition[N];
 자 정 이 삼 십
 사 오 십 오 분
 */
-constexpr ClockWord<2> WORD_HOUR_1 = { { 0, 1 }, { 2, 4 } };             // 한시
-constexpr ClockWord<2> WORD_HOUR_2 = { { 1, 0 }, { 2, 4 } };             // 두시
-constexpr ClockWord<2> WORD_HOUR_3 = { { 0, 3 }, { 2, 4 } };             // 세시
-constexpr ClockWord<2> WORD_HOUR_4 = { { 0, 4 }, { 2, 4 } };             // 네시
-constexpr ClockWord<3> WORD_HOUR_5 = { { 0, 2 }, { 1, 2 }, { 2, 4 } };   // 다섯시
-constexpr ClockWord<3> WORD_HOUR_6 = { { 1, 1 }, { 1, 2 }, { 2, 4 } };   // 여섯시
-constexpr ClockWord<3> WORD_HOUR_7 = { { 1, 3 }, { 1, 4 }, { 2, 4 } };   // 일곱시
-constexpr ClockWord<3> WORD_HOUR_8 = { { 2, 0 }, { 2, 1 }, { 2, 4 } };   // 여덟시
-constexpr ClockWord<3> WORD_HOUR_9 = { { 2, 2 }, { 2, 3 }, { 2, 4 } };   // 아홉시
-constexpr ClockWord<2> WORD_HOUR_10 = { { 0, 0 }, { 2, 4 } };            // 열시
-constexpr ClockWord<3> WORD_HOUR_11 = { { 0, 0 }, { 0, 1 }, { 2, 4 } };  // 열한시
-constexpr ClockWord<3> WORD_HOUR_12 = { { 0, 0 }, { 1, 0 }, { 2, 4 } };  // 열두시
-constexpr ClockWord<2> WORD_MIN_5 = { { 4, 3 }, { 4, 4 } };              // 오분
-constexpr ClockWord<2> WORD_MIN_10 = { { 3, 4 }, { 4, 4 } };             // 십분
-constexpr ClockWord<3> WORD_MIN_15 = { { 4, 2 }, { 4, 3 }, { 4, 4 } };   // 십오분
-constexpr ClockWord<3> WORD_MIN_20 = { { 3, 2 }, { 4, 2 }, { 4, 4 } };   // 이십분
-constexpr ClockWord<3> WORD_MIN_30 = { { 3, 3 }, { 3, 4 }, { 4, 4 } };   // 삼십분
-constexpr ClockWord<3> WORD_MIN_40 = { { 4, 0 }, { 4, 2 }, { 4, 4 } };   // 사십분
-constexpr ClockWord<3> WORD_MIN_50 = { { 4, 1 }, { 4, 2 }, { 4, 4 } };   // 오십분
-constexpr ClockWord<2> WORD_MIDNIGHT = { { 3, 0 }, { 3, 1 } };           // 자정
-constexpr ClockWord<2> WORD_MIDDAY = { { 3, 1 }, { 4, 1 } };             // 정오
+constexpr ClockWord<2> WORD_HOUR_1 = { { 1, 4 }, { 4, 2 } };             // 한시
+constexpr ClockWord<2> WORD_HOUR_2 = { { 0, 3 }, { 4, 2 } };             // 두시
+constexpr ClockWord<2> WORD_HOUR_3 = { { 3, 4 }, { 4, 2 } };             // 세시
+constexpr ClockWord<2> WORD_HOUR_4 = { { 4, 4 }, { 4, 2 } };             // 네시
+constexpr ClockWord<3> WORD_HOUR_5 = { { 2, 4 }, { 2, 3 }, { 4, 2 } };   // 다섯시
+constexpr ClockWord<3> WORD_HOUR_6 = { { 1, 3 }, { 2, 3 }, { 4, 2 } };   // 여섯시
+constexpr ClockWord<3> WORD_HOUR_7 = { { 3, 3 }, { 4, 3 }, { 4, 2 } };   // 일곱시
+constexpr ClockWord<3> WORD_HOUR_8 = { { 0, 2 }, { 1, 2 }, { 4, 2 } };   // 여덟시
+constexpr ClockWord<3> WORD_HOUR_9 = { { 2, 2 }, { 3, 2 }, { 4, 2 } };   // 아홉시
+constexpr ClockWord<2> WORD_HOUR_10 = { { 0, 4 }, { 4, 2 } };            // 열시
+constexpr ClockWord<3> WORD_HOUR_11 = { { 0, 4 }, { 1, 4 }, { 4, 2 } };  // 열한시
+constexpr ClockWord<3> WORD_HOUR_12 = { { 0, 4 }, { 0, 3 }, { 4, 2 } };  // 열두시
+constexpr ClockWord<2> WORD_MIN_5 = { { 3, 0 }, { 4, 0 } };              // 오분
+constexpr ClockWord<2> WORD_MIN_10 = { { 4, 1 }, { 4, 0 } };             // 십분
+constexpr ClockWord<3> WORD_MIN_15 = { { 2, 0 }, { 3, 0 }, { 4, 0 } };   // 십오분
+constexpr ClockWord<3> WORD_MIN_20 = { { 2, 1 }, { 2, 0 }, { 4, 0 } };   // 이십분
+constexpr ClockWord<3> WORD_MIN_30 = { { 3, 1 }, { 4, 1 }, { 4, 0 } };   // 삼십분
+constexpr ClockWord<3> WORD_MIN_40 = { { 0, 0 }, { 2, 0 }, { 4, 0 } };   // 사십분
+constexpr ClockWord<3> WORD_MIN_50 = { { 1, 0 }, { 2, 0 }, { 4, 0 } };   // 오십분
+constexpr ClockWord<2> WORD_MIDNIGHT = { { 0, 1 }, { 1, 1 } };           // 자정
+constexpr ClockWord<2> WORD_MIDDAY = { { 1, 1 }, { 1, 0 } };             // 정오
 
 /**
  * Controller for the Korean clock face.
