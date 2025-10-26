@@ -13,11 +13,17 @@ void Sk6812LedMatrix::begin() {
   neopixel->show();
 }
 
-void Sk6812LedMatrix::show() { return neopixel->show(); }
+void Sk6812LedMatrix::show() {
+  return neopixel->show();
+}
 
-void Sk6812LedMatrix::clear() { return neopixel->clear(); }
+void Sk6812LedMatrix::clear() {
+  return neopixel->clear();
+}
 
-void Sk6812LedMatrix::setBrightness(uint8_t v) { return neopixel->setBrightness(v); }
+void Sk6812LedMatrix::setBrightness(uint8_t v) {
+  return neopixel->setBrightness(v);
+}
 
 void Sk6812LedMatrix::setCell(LedPosition &pos, LedColor &color) {
   // Determine cell position along LED strip
@@ -39,4 +45,6 @@ void Sk6812LedMatrix::setCell(LedPosition &pos, LedColor &color) {
   }
 }
 
-uint16_t Sk6812LedMatrix::numLeds() { return width * height * ledsPerCell; }
+uint16_t Sk6812LedMatrix::numLeds() {
+  return width * height * ledsPerCell;
+}

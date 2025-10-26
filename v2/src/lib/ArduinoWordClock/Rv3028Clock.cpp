@@ -1,6 +1,7 @@
 #include "Rv3028Clock.h"
 
-Rv3028Clock::Rv3028Clock(uint8_t addr) : addr(addr) {}
+Rv3028Clock::Rv3028Clock(uint8_t addr)
+  : addr(addr) {}
 
 void Rv3028Clock::begin() {
   Wire.begin();
@@ -18,7 +19,7 @@ DateTime Rv3028Clock::readDateTime() {
   0x05: month
   0x06: year
   */
-  uint8_t encoded[7] = {0};
+  uint8_t encoded[7] = { 0 };
   i2cRead(RV3028_REG_SECONDS, encoded, 7);
 
   // Decode each value from BCD to regular int
@@ -28,22 +29,26 @@ DateTime Rv3028Clock::readDateTime() {
   }
 
   return DateTime{
-      decoded[0],
-      decoded[1],
-      decoded[2],
-      decoded[3],
-      decoded[4],
-      decoded[5],
-      decoded[6] + (uint16_t)2000, // only last two year digits are stored
+    decoded[0],
+    decoded[1],
+    decoded[2],
+    decoded[3],
+    decoded[4],
+    decoded[5],
+    decoded[6] + (uint16_t)2000,  // only last two year digits are stored
   };
 }
 
 void Rv3028Clock::setDateTime(DateTime &dt) {
   // Encode each value from regular int to BCD
   uint8_t encoded[7] = {
-      encodeBcd(dt.second),     encodeBcd(dt.minute), encodeBcd(dt.hour),
-      encodeBcd(dt.weekday),    encodeBcd(dt.day),    encodeBcd(dt.month),
-      encodeBcd(dt.year % 100),
+    encodeBcd(dt.second),
+    encodeBcd(dt.minute),
+    encodeBcd(dt.hour),
+    encodeBcd(dt.weekday),
+    encodeBcd(dt.day),
+    encodeBcd(dt.month),
+    encodeBcd(dt.year % 100),
   };
 
   /*
@@ -196,9 +201,7 @@ void Rv3028Clock::setBatterySwitchoverMode(uint8_t mode) {
   uint8_t value = eepromRead(RV3028_REG_BACKUP);
 
   // Clear the BSM and FEDE (Fast Edge Detection Enable) bits
-  value = value &
-          ~((1 << RV3028_POS_BACKUP_BSM) & (1 << (RV3028_POS_BACKUP_BSM + 1)) &
-            (1 << RV3028_POS_BACKUP_FEDE));
+  value = value & ~((1 << RV3028_POS_BACKUP_BSM) & (1 << (RV3028_POS_BACKUP_BSM + 1)) & (1 << RV3028_POS_BACKUP_FEDE));
 
   // Write the BSM bits
   value = value | ((mode & 0x3) << RV3028_POS_BACKUP_BSM);

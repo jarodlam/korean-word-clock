@@ -14,6 +14,6 @@ struct DateTime {
 
 class Clock {
 public:
-  virtual DateTime readDateTime() = 0; // pure virtual
-  virtual void setDateTime(DateTime &dt) = 0; // pure virtual
+  virtual DateTime readDateTime() = 0;         // pure virtual
+  virtual void setDateTime(DateTime &dt) = 0;  // pure virtual
 };

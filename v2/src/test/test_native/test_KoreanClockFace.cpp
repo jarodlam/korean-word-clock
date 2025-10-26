@@ -10,10 +10,10 @@ public:
   void show() override {}
   void clear() override {}
   void setBrightness(uint8_t) override {}
-  void setCell(LedPosition &, LedColor &) override {}
+  void setCell(LedPosition&, LedColor&) override {}
 };
 
-template <size_t N>
+template<size_t N>
 void assertWordSet(const ClockWord<N>& word, bool* rawState) {
   // rawState is a flattened bool[KOREAN_CLOCK_FACE_WIDTH][KOREAN_CLOCK_FACE_HEIGHT]
   for (auto pos : word) {
@@ -99,7 +99,7 @@ void test_update_midday() {
   assertWordSet(WORD_MIDDAY, state);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   UNITY_BEGIN();
   RUN_TEST(test_update_hour_only);
   RUN_TEST(test_update_quarter_past);

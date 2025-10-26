@@ -12,7 +12,7 @@
 /**
  * A word comprises one or more cells on the clock face.
  */
-template <size_t N>
+template<size_t N>
 using ClockWord = LedPosition[N];
 
 /*
@@ -60,7 +60,7 @@ public:
   /* 
    * For testing only.
    */
-  bool* getState();
+  bool *getState();
 
 private:
   uint8_t _brightness;
@@ -76,8 +76,8 @@ private:
   /**
    * Turns on a word.
    */
-  template <size_t N>
-  void _setWord(const ClockWord<N>& word) {
+  template<size_t N>
+  void _setWord(const ClockWord<N> &word) {
     for (auto pos : word) {
       _state[pos.x][pos.y] = true;
     }

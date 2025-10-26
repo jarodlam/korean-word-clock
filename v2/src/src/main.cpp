@@ -41,8 +41,7 @@ void setup() {
 #ifdef SET_TIME
   DateTime newTime = DateTime{ SET_TIME };
   rtc.setDateTime(newTime);
-  while (true) {  // Disable device in set time mode
-  }
+  while (true) {}  // Disable device in set time mode
 #endif
 }
 

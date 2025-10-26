@@ -1,4 +1,4 @@
-#if defined(ARDUINO_ARCH_RP2040) // RP2040 specific driver
+#if defined(ARDUINO_ARCH_RP2040)  // RP2040 specific driver
 
 #include "Adafruit_NeoPixel.h"
 
@@ -7,11 +7,11 @@ bool Adafruit_NeoPixel::rp2040claimPIO(void) {
   pio = NULL;
 
   if (!pio_claim_free_sm_and_add_program_for_gpio_range(
-          &ws2812_program, &pio, &pio_sm, &pio_program_offset, pin, 1, true)) {
+        &ws2812_program, &pio, &pio_sm, &pio_program_offset, pin, 1, true)) {
     pio = NULL;
     pio_sm = -1;
     pio_program_offset = 0;
-    return false; // No PIO available
+    return false;  // No PIO available
   }
 
   // yay ok!

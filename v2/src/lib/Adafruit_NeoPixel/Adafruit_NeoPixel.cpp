@@ -66,7 +66,7 @@
 #endif
 
 #if defined(ARDUINO_ARCH_MBED)
-#include "mbed.h" // Needed for DigitalOut and PinName
+#include "mbed.h"  // Needed for DigitalOut and PinName
 #endif
 
 /*!
@@ -82,7 +82,7 @@
   @return  Adafruit_NeoPixel object. Call the begin() function before use.
 */
 Adafruit_NeoPixel::Adafruit_NeoPixel(uint16_t n, int16_t p, neoPixelType t)
-    : begun(false), brightness(0), pixels(NULL), endTime(0) {
+  : begun(false), brightness(0), pixels(NULL), endTime(0) {
   updateType(t);
   updateLength(n);
   setPin(p);
@@ -105,12 +105,12 @@ Adafruit_NeoPixel::Adafruit_NeoPixel(uint16_t n, int16_t p, neoPixelType t)
            type).
 */
 Adafruit_NeoPixel::Adafruit_NeoPixel()
-    :
+  :
 #if defined(NEO_KHZ400)
-      is800KHz(true),
+    is800KHz(true),
 #endif
-      begun(false), numLEDs(0), numBytes(0), pin(-1), brightness(0),
-      pixels(NULL), rOffset(1), gOffset(0), bOffset(2), wOffset(1), endTime(0) {
+    begun(false), numLEDs(0), numBytes(0), pin(-1), brightness(0),
+    pixels(NULL), rOffset(1), gOffset(0), bOffset(2), wOffset(1), endTime(0) {
 }
 
 /*!
@@ -173,7 +173,7 @@ bool Adafruit_NeoPixel::begin(void) {
            type).
 */
 void Adafruit_NeoPixel::updateLength(uint16_t n) {
-  free(pixels); // Free existing data (if any)
+  free(pixels);  // Free existing data (if any)
 
   // Allocate new data -- note: ALL PIXELS ARE CLEARED
   numBytes = n * ((wOffset == rOffset) ? 3 : 4);
@@ -203,14 +203,14 @@ void Adafruit_NeoPixel::updateLength(uint16_t n) {
            (length, pin, type).
 */
 void Adafruit_NeoPixel::updateType(neoPixelType t) {
-  bool oldThreeBytesPerPixel = (wOffset == rOffset); // false if RGBW
+  bool oldThreeBytesPerPixel = (wOffset == rOffset);  // false if RGBW
 
-  wOffset = (t >> 6) & 0b11; // See notes in header file
-  rOffset = (t >> 4) & 0b11; // regarding R/G/B/W offsets
+  wOffset = (t >> 6) & 0b11;  // See notes in header file
+  rOffset = (t >> 4) & 0b11;  // regarding R/G/B/W offsets
   gOffset = (t >> 2) & 0b11;
   bOffset = t & 0b11;
 #if defined(NEO_KHZ400)
-  is800KHz = (t < 256); // 400 KHz flag is 1<<8
+  is800KHz = (t < 256);  // 400 KHz flag is 1<<8
 #endif
 
   // If bytes-per-pixel has changed (and pixel data was previously
@@ -225,28 +225,22 @@ void Adafruit_NeoPixel::updateType(neoPixelType t) {
 #if defined(ARDUINO_ARCH_CH32)
 
 // F_CPU is defined to SystemCoreClock (not constant number)
-#if SYSCLK_FREQ_144MHz_HSE == 144000000 || SYSCLK_FREQ_HSE == 144000000 ||     \
-    SYSCLK_FREQ_144MHz_HSI == 144000000 || SYSCLK_FREQ_HSI == 144000000
+#if SYSCLK_FREQ_144MHz_HSE == 144000000 || SYSCLK_FREQ_HSE == 144000000 || SYSCLK_FREQ_144MHz_HSI == 144000000 || SYSCLK_FREQ_HSI == 144000000
 #define CH32_F_CPU 144000000
 
-#elif SYSCLK_FREQ_120MHz_HSE == 120000000 || SYSCLK_FREQ_HSE == 120000000 ||   \
-    SYSCLK_FREQ_120MHz_HSI == 120000000 || SYSCLK_FREQ_HSI == 120000000
+#elif SYSCLK_FREQ_120MHz_HSE == 120000000 || SYSCLK_FREQ_HSE == 120000000 || SYSCLK_FREQ_120MHz_HSI == 120000000 || SYSCLK_FREQ_HSI == 120000000
 #define CH32_F_CPU 120000000
 
-#elif SYSCLK_FREQ_96MHz_HSE == 96000000 || SYSCLK_FREQ_HSE == 96000000 ||      \
-    SYSCLK_FREQ_96MHz_HSI == 96000000 || SYSCLK_FREQ_HSI == 96000000
+#elif SYSCLK_FREQ_96MHz_HSE == 96000000 || SYSCLK_FREQ_HSE == 96000000 || SYSCLK_FREQ_96MHz_HSI == 96000000 || SYSCLK_FREQ_HSI == 96000000
 #define CH32_F_CPU 96000000
 
-#elif SYSCLK_FREQ_72MHz_HSE == 72000000 || SYSCLK_FREQ_HSE == 72000000 ||      \
-    SYSCLK_FREQ_72MHz_HSI == 72000000 || SYSCLK_FREQ_HSI == 72000000
+#elif SYSCLK_FREQ_72MHz_HSE == 72000000 || SYSCLK_FREQ_HSE == 72000000 || SYSCLK_FREQ_72MHz_HSI == 72000000 || SYSCLK_FREQ_HSI == 72000000
 #define CH32_F_CPU 72000000
 
-#elif SYSCLK_FREQ_56MHz_HSE == 56000000 || SYSCLK_FREQ_HSE == 56000000 ||      \
-    SYSCLK_FREQ_56MHz_HSI == 56000000 || SYSCLK_FREQ_HSI == 56000000
+#elif SYSCLK_FREQ_56MHz_HSE == 56000000 || SYSCLK_FREQ_HSE == 56000000 || SYSCLK_FREQ_56MHz_HSI == 56000000 || SYSCLK_FREQ_HSI == 56000000
 #define CH32_F_CPU 56000000
 
-#elif SYSCLK_FREQ_48MHz_HSE == 48000000 || SYSCLK_FREQ_HSE == 48000000 ||      \
-    SYSCLK_FREQ_48MHz_HSI == 48000000 || SYSCLK_FREQ_HSI == 48000000
+#elif SYSCLK_FREQ_48MHz_HSE == 48000000 || SYSCLK_FREQ_HSE == 48000000 || SYSCLK_FREQ_48MHz_HSI == 48000000 || SYSCLK_FREQ_HSI == 48000000
 #define CH32_F_CPU 48000000
 
 #endif
@@ -268,7 +262,7 @@ static void ch32Show(GPIO_TypeDef *ch_port, uint32_t ch_pin, uint8_t *pixels,
   // NVIC_DisableIRQ(SysTicK_IRQn);
 
   while (1) {
-    if (p & bitMask) { // ONE
+    if (p & bitMask) {  // ONE
       // High 800ns
       *set = ch_pin;
       __asm volatile("nop; nop; nop; nop; nop; nop; nop; nop;"
@@ -300,24 +294,24 @@ static void ch32Show(GPIO_TypeDef *ch_port, uint32_t ch_pin, uint8_t *pixels,
       // Low 450ns
       *clr = ch_pin;
       __asm volatile(
-          "nop; nop; nop; nop; nop; nop; nop; nop;"
-          "nop; nop; nop; nop; nop; nop; nop; nop;"
-          "nop;"
+        "nop; nop; nop; nop; nop; nop; nop; nop;"
+        "nop; nop; nop; nop; nop; nop; nop; nop;"
+        "nop;"
 #if CH32_F_CPU >= 72000000
-          "nop; nop; nop; nop; nop; nop; nop; nop; nop;"
+        "nop; nop; nop; nop; nop; nop; nop; nop; nop;"
 #endif
 #if CH32_F_CPU >= 96000000
-          "nop; nop; nop; nop; nop; nop;"
+        "nop; nop; nop; nop; nop; nop;"
 #endif
 #if CH32_F_CPU >= 120000000
-          "nop; nop; nop; nop; nop;"
-          "nop; nop; nop; nop; nop; nop; nop; nop;"
+        "nop; nop; nop; nop; nop;"
+        "nop; nop; nop; nop; nop; nop; nop; nop;"
 #endif
 #if CH32_F_CPU >= 144000000
-          "nop; nop; nop; nop; nop; nop; nop; nop; nop; nop; nop; nop;"
+        "nop; nop; nop; nop; nop; nop; nop; nop; nop; nop; nop; nop;"
 #endif
       );
-    } else { // ZERO
+    } else {  // ZERO
       // High 400ns
       *set = ch_pin;
       __asm volatile("nop; nop; nop; nop; nop; nop; nop; nop;"
@@ -390,7 +384,7 @@ extern "C" IRAM_ATTR void espShow(uint16_t pin, uint8_t *pixels,
 extern "C" void espShow(uint16_t pin, uint8_t *pixels, uint32_t numBytes,
                         uint8_t type);
 
-#endif // ESP8266
+#endif  // ESP8266
 
 #if defined(K210)
 #define KENDRYTE_K210 1
@@ -399,7 +393,7 @@ extern "C" void espShow(uint16_t pin, uint8_t *pixels, uint32_t numBytes,
 #if defined(KENDRYTE_K210)
 extern "C" void k210Show(uint8_t pin, uint8_t *pixels, uint32_t numBytes,
                          boolean is800KHz);
-#endif // KENDRYTE_K210
+#endif  // KENDRYTE_K210
 /*!
   @brief   Transmit pixel data in RAM to NeoPixels.
   @note    On most architectures, interrupts are temporarily disabled in
@@ -422,8 +416,7 @@ void Adafruit_NeoPixel::show(void) {
   // subsequent round of data until the latch time has elapsed. This
   // allows the mainline code to start generating the next frame of data
   // rather than stalling for the latch.
-  while (!canShow())
-    ;
+  while (!canShow());
   // endTime is a private member (rather than global var) so that multiple
   // instances on different pins can be quickly issued in succession (each
   // instance doesn't delay the next).
@@ -442,17 +435,17 @@ void Adafruit_NeoPixel::show(void) {
   // ESP32 may not disable interrupts because espShow() uses RMT which tries to
   // acquire locks
 #if !(defined(NRF52) || defined(NRF52_SERIES) || defined(ESP32))
-  noInterrupts(); // Need 100% focus on instruction timing
+  noInterrupts();  // Need 100% focus on instruction timing
 #endif
 
 #if defined(__AVR__)
   // AVR MCUs -- ATmega & ATtiny (no XMEGA) ---------------------------------
 
-  volatile uint16_t i = numBytes; // Loop counter
-  volatile uint8_t *ptr = pixels, // Pointer to next byte
-      b = *ptr++,                 // Current byte value
-      hi,                         // PORT w/output bit set high
-      lo;                         // PORT w/output bit set low
+  volatile uint16_t i = numBytes;  // Loop counter
+  volatile uint8_t *ptr = pixels,  // Pointer to next byte
+    b = *ptr++,                    // Current byte value
+    hi,                            // PORT w/output bit set high
+    lo;                            // PORT w/output bit set low
 
   // Hand-tuned assembly code issues data to the LED drivers at a specific
   // rate. There's separate code for different CPU speeds (8, 12, 16 MHz)
@@ -471,11 +464,11 @@ void Adafruit_NeoPixel::show(void) {
 // 8 MHz(ish) AVR ---------------------------------------------------------
 #if (F_CPU >= 7400000UL) && (F_CPU <= 9500000UL)
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
 
-    volatile uint8_t n1, n2 = 0; // First, next bits out
+    volatile uint8_t n1, n2 = 0;  // First, next bits out
 
     // Squeezing an 800 KHz stream out of an 8 MHz chip requires code
     // specific to each PORT register.
@@ -488,7 +481,7 @@ void Adafruit_NeoPixel::show(void) {
 #if defined(PORTD)
 #if defined(PORTB) || defined(PORTC) || defined(PORTF)
     if (port == &PORTD) {
-#endif // defined(PORTB/C/F)
+#endif  // defined(PORTB/C/F)
 
       hi = PORTD | pinMask;
       lo = PORTD & ~pinMask;
@@ -503,159 +496,159 @@ void Adafruit_NeoPixel::show(void) {
       // relative branch.
 
       asm volatile(
-          "headD:"
-          "\n\t" // Clk  Pseudocode
-                 // Bit 7:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n2]   , %[lo]"
-          "\n\t" // 1    n2   = lo
-          "out  %[port] , %[n1]"
-          "\n\t" // 1    PORT = n1
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 6"
-          "\n\t" // 1-2  if(b & 0x40)
-          "mov %[n2]   , %[hi]"
-          "\n\t" // 0-1   n2 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          // Bit 6:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n1]   , %[lo]"
-          "\n\t" // 1    n1   = lo
-          "out  %[port] , %[n2]"
-          "\n\t" // 1    PORT = n2
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 5"
-          "\n\t" // 1-2  if(b & 0x20)
-          "mov %[n1]   , %[hi]"
-          "\n\t" // 0-1   n1 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          // Bit 5:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n2]   , %[lo]"
-          "\n\t" // 1    n2   = lo
-          "out  %[port] , %[n1]"
-          "\n\t" // 1    PORT = n1
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 4"
-          "\n\t" // 1-2  if(b & 0x10)
-          "mov %[n2]   , %[hi]"
-          "\n\t" // 0-1   n2 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          // Bit 4:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n1]   , %[lo]"
-          "\n\t" // 1    n1   = lo
-          "out  %[port] , %[n2]"
-          "\n\t" // 1    PORT = n2
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 3"
-          "\n\t" // 1-2  if(b & 0x08)
-          "mov %[n1]   , %[hi]"
-          "\n\t" // 0-1   n1 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          // Bit 3:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n2]   , %[lo]"
-          "\n\t" // 1    n2   = lo
-          "out  %[port] , %[n1]"
-          "\n\t" // 1    PORT = n1
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 2"
-          "\n\t" // 1-2  if(b & 0x04)
-          "mov %[n2]   , %[hi]"
-          "\n\t" // 0-1   n2 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          // Bit 2:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n1]   , %[lo]"
-          "\n\t" // 1    n1   = lo
-          "out  %[port] , %[n2]"
-          "\n\t" // 1    PORT = n2
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 1"
-          "\n\t" // 1-2  if(b & 0x02)
-          "mov %[n1]   , %[hi]"
-          "\n\t" // 0-1   n1 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          // Bit 1:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n2]   , %[lo]"
-          "\n\t" // 1    n2   = lo
-          "out  %[port] , %[n1]"
-          "\n\t" // 1    PORT = n1
-          "rjmp .+0"
-          "\n\t" // 2    nop nop
-          "sbrc %[byte] , 0"
-          "\n\t" // 1-2  if(b & 0x01)
-          "mov %[n2]   , %[hi]"
-          "\n\t" // 0-1   n2 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "sbiw %[count], 1"
-          "\n\t" // 2    i-- (don't act on Z flag yet)
-          // Bit 0:
-          "out  %[port] , %[hi]"
-          "\n\t" // 1    PORT = hi
-          "mov  %[n1]   , %[lo]"
-          "\n\t" // 1    n1   = lo
-          "out  %[port] , %[n2]"
-          "\n\t" // 1    PORT = n2
-          "ld   %[byte] , %a[ptr]+"
-          "\n\t" // 2    b = *ptr++
-          "sbrc %[byte] , 7"
-          "\n\t" // 1-2  if(b & 0x80)
-          "mov %[n1]   , %[hi]"
-          "\n\t" // 0-1   n1 = hi
-          "out  %[port] , %[lo]"
-          "\n\t" // 1    PORT = lo
-          "brne headD"
-          "\n" // 2    while(i) (Z flag set above)
-          : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
-          : [port] "I"(_SFR_IO_ADDR(PORTD)), [ptr] "e"(ptr), [hi] "r"(hi),
-            [lo] "r"(lo));
+        "headD:"
+        "\n\t"  // Clk  Pseudocode
+                // Bit 7:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n2]   , %[lo]"
+        "\n\t"  // 1    n2   = lo
+        "out  %[port] , %[n1]"
+        "\n\t"  // 1    PORT = n1
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 6"
+        "\n\t"  // 1-2  if(b & 0x40)
+        "mov %[n2]   , %[hi]"
+        "\n\t"  // 0-1   n2 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        // Bit 6:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n1]   , %[lo]"
+        "\n\t"  // 1    n1   = lo
+        "out  %[port] , %[n2]"
+        "\n\t"  // 1    PORT = n2
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 5"
+        "\n\t"  // 1-2  if(b & 0x20)
+        "mov %[n1]   , %[hi]"
+        "\n\t"  // 0-1   n1 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        // Bit 5:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n2]   , %[lo]"
+        "\n\t"  // 1    n2   = lo
+        "out  %[port] , %[n1]"
+        "\n\t"  // 1    PORT = n1
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 4"
+        "\n\t"  // 1-2  if(b & 0x10)
+        "mov %[n2]   , %[hi]"
+        "\n\t"  // 0-1   n2 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        // Bit 4:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n1]   , %[lo]"
+        "\n\t"  // 1    n1   = lo
+        "out  %[port] , %[n2]"
+        "\n\t"  // 1    PORT = n2
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 3"
+        "\n\t"  // 1-2  if(b & 0x08)
+        "mov %[n1]   , %[hi]"
+        "\n\t"  // 0-1   n1 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        // Bit 3:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n2]   , %[lo]"
+        "\n\t"  // 1    n2   = lo
+        "out  %[port] , %[n1]"
+        "\n\t"  // 1    PORT = n1
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 2"
+        "\n\t"  // 1-2  if(b & 0x04)
+        "mov %[n2]   , %[hi]"
+        "\n\t"  // 0-1   n2 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        // Bit 2:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n1]   , %[lo]"
+        "\n\t"  // 1    n1   = lo
+        "out  %[port] , %[n2]"
+        "\n\t"  // 1    PORT = n2
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 1"
+        "\n\t"  // 1-2  if(b & 0x02)
+        "mov %[n1]   , %[hi]"
+        "\n\t"  // 0-1   n1 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        // Bit 1:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n2]   , %[lo]"
+        "\n\t"  // 1    n2   = lo
+        "out  %[port] , %[n1]"
+        "\n\t"  // 1    PORT = n1
+        "rjmp .+0"
+        "\n\t"  // 2    nop nop
+        "sbrc %[byte] , 0"
+        "\n\t"  // 1-2  if(b & 0x01)
+        "mov %[n2]   , %[hi]"
+        "\n\t"  // 0-1   n2 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "sbiw %[count], 1"
+        "\n\t"  // 2    i-- (don't act on Z flag yet)
+        // Bit 0:
+        "out  %[port] , %[hi]"
+        "\n\t"  // 1    PORT = hi
+        "mov  %[n1]   , %[lo]"
+        "\n\t"  // 1    n1   = lo
+        "out  %[port] , %[n2]"
+        "\n\t"  // 1    PORT = n2
+        "ld   %[byte] , %a[ptr]+"
+        "\n\t"  // 2    b = *ptr++
+        "sbrc %[byte] , 7"
+        "\n\t"  // 1-2  if(b & 0x80)
+        "mov %[n1]   , %[hi]"
+        "\n\t"  // 0-1   n1 = hi
+        "out  %[port] , %[lo]"
+        "\n\t"  // 1    PORT = lo
+        "brne headD"
+        "\n"  // 2    while(i) (Z flag set above)
+        : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
+        : [port] "I"(_SFR_IO_ADDR(PORTD)), [ptr] "e"(ptr), [hi] "r"(hi),
+          [lo] "r"(lo));
 
 #if defined(PORTB) || defined(PORTC) || defined(PORTF)
-    } else // other PORT(s)
-#endif     // defined(PORTB/C/F)
-#endif     // defined(PORTD)
+    } else  // other PORT(s)
+#endif      // defined(PORTB/C/F)
+#endif      // defined(PORTD)
 
     // PORTB OUTPUT ----------------------------------------------------
 
 #if defined(PORTB)
 #if defined(PORTD) || defined(PORTC) || defined(PORTF)
-        if (port == &PORTB) {
-#endif // defined(PORTD/C/F)
+      if (port == &PORTB) {
+#endif  // defined(PORTD/C/F)
 
       // Same as above, just switched to PORTB and stripped of comments.
       hi = PORTB | pinMask;
@@ -665,154 +658,154 @@ void Adafruit_NeoPixel::show(void) {
         n1 = hi;
 
       asm volatile(
-          "headB:"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 6"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 5"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 4"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 3"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 2"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 1"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 0"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "sbiw %[count], 1"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "ld   %[byte] , %a[ptr]+"
-          "\n\t"
-          "sbrc %[byte] , 7"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "brne headB"
-          "\n"
-          : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
-          : [port] "I"(_SFR_IO_ADDR(PORTB)), [ptr] "e"(ptr), [hi] "r"(hi),
-            [lo] "r"(lo));
+        "headB:"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 6"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 5"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 4"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 3"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 2"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 1"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 0"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "sbiw %[count], 1"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "ld   %[byte] , %a[ptr]+"
+        "\n\t"
+        "sbrc %[byte] , 7"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "brne headB"
+        "\n"
+        : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
+        : [port] "I"(_SFR_IO_ADDR(PORTB)), [ptr] "e"(ptr), [hi] "r"(hi),
+          [lo] "r"(lo));
 
 #if defined(PORTD) || defined(PORTC) || defined(PORTF)
     }
 #endif
 #if defined(PORTC) || defined(PORTF)
     else
-#endif // defined(PORTC/F)
-#endif // defined(PORTB)
+#endif  // defined(PORTC/F)
+#endif  // defined(PORTB)
 
     // PORTC OUTPUT ----------------------------------------------------
 
 #if defined(PORTC)
 #if defined(PORTD) || defined(PORTB) || defined(PORTF)
-        if (port == &PORTC) {
-#endif // defined(PORTD/B/F)
+      if (port == &PORTC) {
+#endif  // defined(PORTD/B/F)
 
       // Same as above, just switched to PORTC and stripped of comments.
       hi = PORTC | pinMask;
@@ -822,154 +815,154 @@ void Adafruit_NeoPixel::show(void) {
         n1 = hi;
 
       asm volatile(
-          "headC:"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 6"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 5"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 4"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 3"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 2"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 1"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 0"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "sbiw %[count], 1"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "ld   %[byte] , %a[ptr]+"
-          "\n\t"
-          "sbrc %[byte] , 7"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "brne headC"
-          "\n"
-          : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
-          : [port] "I"(_SFR_IO_ADDR(PORTC)), [ptr] "e"(ptr), [hi] "r"(hi),
-            [lo] "r"(lo));
+        "headC:"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 6"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 5"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 4"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 3"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 2"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 1"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 0"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "sbiw %[count], 1"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "ld   %[byte] , %a[ptr]+"
+        "\n\t"
+        "sbrc %[byte] , 7"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "brne headC"
+        "\n"
+        : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
+        : [port] "I"(_SFR_IO_ADDR(PORTC)), [ptr] "e"(ptr), [hi] "r"(hi),
+          [lo] "r"(lo));
 
 #if defined(PORTD) || defined(PORTB) || defined(PORTF)
     }
-#endif // defined(PORTD/B/F)
+#endif  // defined(PORTD/B/F)
 #if defined(PORTF)
     else
 #endif
-#endif // defined(PORTC)
+#endif  // defined(PORTC)
 
     // PORTF OUTPUT ----------------------------------------------------
 
 #if defined(PORTF)
 #if defined(PORTD) || defined(PORTB) || defined(PORTC)
-        if (port == &PORTF) {
-#endif // defined(PORTD/B/C)
+      if (port == &PORTF) {
+#endif  // defined(PORTD/B/C)
 
       hi = PORTF | pinMask;
       lo = PORTF & ~pinMask;
@@ -978,147 +971,147 @@ void Adafruit_NeoPixel::show(void) {
         n1 = hi;
 
       asm volatile(
-          "headF:"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 6"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 5"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 4"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 3"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 2"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 1"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n2]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n1]"
-          "\n\t"
-          "rjmp .+0"
-          "\n\t"
-          "sbrc %[byte] , 0"
-          "\n\t"
-          "mov %[n2]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "sbiw %[count], 1"
-          "\n\t"
-          "out  %[port] , %[hi]"
-          "\n\t"
-          "mov  %[n1]   , %[lo]"
-          "\n\t"
-          "out  %[port] , %[n2]"
-          "\n\t"
-          "ld   %[byte] , %a[ptr]+"
-          "\n\t"
-          "sbrc %[byte] , 7"
-          "\n\t"
-          "mov %[n1]   , %[hi]"
-          "\n\t"
-          "out  %[port] , %[lo]"
-          "\n\t"
-          "brne headF"
-          "\n"
-          : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
-          : [port] "I"(_SFR_IO_ADDR(PORTF)), [ptr] "e"(ptr), [hi] "r"(hi),
-            [lo] "r"(lo));
+        "headF:"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 6"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 5"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 4"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 3"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 2"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 1"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n2]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n1]"
+        "\n\t"
+        "rjmp .+0"
+        "\n\t"
+        "sbrc %[byte] , 0"
+        "\n\t"
+        "mov %[n2]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "sbiw %[count], 1"
+        "\n\t"
+        "out  %[port] , %[hi]"
+        "\n\t"
+        "mov  %[n1]   , %[lo]"
+        "\n\t"
+        "out  %[port] , %[n2]"
+        "\n\t"
+        "ld   %[byte] , %a[ptr]+"
+        "\n\t"
+        "sbrc %[byte] , 7"
+        "\n\t"
+        "mov %[n1]   , %[hi]"
+        "\n\t"
+        "out  %[port] , %[lo]"
+        "\n\t"
+        "brne headF"
+        "\n"
+        : [byte] "+r"(b), [n1] "+r"(n1), [n2] "+r"(n2), [count] "+w"(i)
+        : [port] "I"(_SFR_IO_ADDR(PORTF)), [ptr] "e"(ptr), [hi] "r"(hi),
+          [lo] "r"(lo));
 
 #if defined(PORTD) || defined(PORTB) || defined(PORTC)
     }
-#endif // defined(PORTD/B/C)
-#endif // defined(PORTF)
+#endif  // defined(PORTD/B/C)
+#endif  // defined(PORTF)
 
 #if defined(NEO_KHZ400)
-  } else { // end 800 KHz, do 400 KHz
+  } else {  // end 800 KHz, do 400 KHz
 
     // Timing is more relaxed; unrolling the inner loop for each bit is
     // not necessary. Still using the peculiar RJMPs as 2X NOPs, not out
@@ -1138,57 +1131,57 @@ void Adafruit_NeoPixel::show(void) {
     bit = 8;
 
     asm volatile("head20%=:"
-                 "\n\t" // Clk  Pseudocode    (T =  0)
+                 "\n\t"  // Clk  Pseudocode    (T =  0)
                  "st   %a[port], %[hi]"
-                 "\n\t" // 2    PORT = hi     (T =  2)
+                 "\n\t"  // 2    PORT = hi     (T =  2)
                  "sbrc %[byte] , 7"
-                 "\n\t" // 1-2  if(b & 128)
+                 "\n\t"  // 1-2  if(b & 128)
                  "mov  %[next], %[hi]"
-                 "\n\t" // 0-1   next = hi    (T =  4)
+                 "\n\t"  // 0-1   next = hi    (T =  4)
                  "st   %a[port], %[next]"
-                 "\n\t" // 2    PORT = next   (T =  6)
+                 "\n\t"  // 2    PORT = next   (T =  6)
                  "mov  %[next] , %[lo]"
-                 "\n\t" // 1    next = lo     (T =  7)
+                 "\n\t"  // 1    next = lo     (T =  7)
                  "dec  %[bit]"
-                 "\n\t" // 1    bit--         (T =  8)
+                 "\n\t"  // 1    bit--         (T =  8)
                  "breq nextbyte20%="
-                 "\n\t" // 1-2  if(bit == 0)
+                 "\n\t"  // 1-2  if(bit == 0)
                  "rol  %[byte]"
-                 "\n\t" // 1    b <<= 1       (T = 10)
+                 "\n\t"  // 1    b <<= 1       (T = 10)
                  "st   %a[port], %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 12)
+                 "\n\t"  // 2    PORT = lo     (T = 12)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 14)
+                 "\n\t"  // 2    nop nop       (T = 14)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 16)
+                 "\n\t"  // 2    nop nop       (T = 16)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 18)
+                 "\n\t"  // 2    nop nop       (T = 18)
                  "rjmp head20%="
-                 "\n\t" // 2    -> head20 (next bit out)
+                 "\n\t"  // 2    -> head20 (next bit out)
                  "nextbyte20%=:"
-                 "\n\t" //                    (T = 10)
+                 "\n\t"  //                    (T = 10)
                  "st   %a[port], %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 12)
+                 "\n\t"  // 2    PORT = lo     (T = 12)
                  "nop"
-                 "\n\t" // 1    nop           (T = 13)
+                 "\n\t"  // 1    nop           (T = 13)
                  "ldi  %[bit]  , 8"
-                 "\n\t" // 1    bit = 8       (T = 14)
+                 "\n\t"  // 1    bit = 8       (T = 14)
                  "ld   %[byte] , %a[ptr]+"
-                 "\n\t" // 2    b = *ptr++    (T = 16)
+                 "\n\t"  // 2    b = *ptr++    (T = 16)
                  "sbiw %[count], 1"
-                 "\n\t" // 2    i--           (T = 18)
+                 "\n\t"  // 2    i--           (T = 18)
                  "brne head20%="
-                 "\n" // 2    if(i != 0) -> (next byte)
+                 "\n"  // 2    if(i != 0) -> (next byte)
                  : [port] "+e"(port), [byte] "+r"(b), [bit] "+r"(bit),
                    [next] "+r"(next), [count] "+w"(i)
                  : [hi] "r"(hi), [lo] "r"(lo), [ptr] "e"(ptr));
   }
-#endif // NEO_KHZ400
+#endif  // NEO_KHZ400
 
 // 12 MHz(ish) AVR --------------------------------------------------------
 #elif (F_CPU >= 11100000UL) && (F_CPU <= 14300000UL)
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
 
@@ -1206,7 +1199,7 @@ void Adafruit_NeoPixel::show(void) {
 #if defined(PORTD)
 #if defined(PORTB) || defined(PORTC) || defined(PORTF)
     if (port == &PORTD) {
-#endif // defined(PORTB/C/F)
+#endif  // defined(PORTB/C/F)
 
       hi = PORTD | pinMask;
       lo = PORTD & ~pinMask;
@@ -1217,78 +1210,78 @@ void Adafruit_NeoPixel::show(void) {
       // Don't "optimize" the OUT calls into the bitTime subroutine;
       // we're exploiting the RCALL and RET as 3- and 4-cycle NOPs!
       asm volatile("headD:"
-                   "\n\t" //        (T =  0)
+                   "\n\t"  //        (T =  0)
                    "out   %[port], %[hi]"
-                   "\n\t" //        (T =  1)
+                   "\n\t"  //        (T =  1)
                    "rcall bitTimeD"
-                   "\n\t" // Bit 7  (T = 15)
-                   "out   %[port], %[hi]"
-                   "\n\t"
-                   "rcall bitTimeD"
-                   "\n\t" // Bit 6
+                   "\n\t"  // Bit 7  (T = 15)
                    "out   %[port], %[hi]"
                    "\n\t"
                    "rcall bitTimeD"
-                   "\n\t" // Bit 5
+                   "\n\t"  // Bit 6
                    "out   %[port], %[hi]"
                    "\n\t"
                    "rcall bitTimeD"
-                   "\n\t" // Bit 4
+                   "\n\t"  // Bit 5
                    "out   %[port], %[hi]"
                    "\n\t"
                    "rcall bitTimeD"
-                   "\n\t" // Bit 3
+                   "\n\t"  // Bit 4
                    "out   %[port], %[hi]"
                    "\n\t"
                    "rcall bitTimeD"
-                   "\n\t" // Bit 2
+                   "\n\t"  // Bit 3
                    "out   %[port], %[hi]"
                    "\n\t"
                    "rcall bitTimeD"
-                   "\n\t" // Bit 1
+                   "\n\t"  // Bit 2
+                   "out   %[port], %[hi]"
+                   "\n\t"
+                   "rcall bitTimeD"
+                   "\n\t"  // Bit 1
                    // Bit 0:
                    "out  %[port] , %[hi]"
-                   "\n\t" // 1    PORT = hi    (T =  1)
+                   "\n\t"  // 1    PORT = hi    (T =  1)
                    "rjmp .+0"
-                   "\n\t" // 2    nop nop      (T =  3)
+                   "\n\t"  // 2    nop nop      (T =  3)
                    "ld   %[byte] , %a[ptr]+"
-                   "\n\t" // 2    b = *ptr++   (T =  5)
+                   "\n\t"  // 2    b = *ptr++   (T =  5)
                    "out  %[port] , %[next]"
-                   "\n\t" // 1    PORT = next  (T =  6)
+                   "\n\t"  // 1    PORT = next  (T =  6)
                    "mov  %[next] , %[lo]"
-                   "\n\t" // 1    next = lo    (T =  7)
+                   "\n\t"  // 1    next = lo    (T =  7)
                    "sbrc %[byte] , 7"
-                   "\n\t" // 1-2  if(b & 0x80) (T =  8)
+                   "\n\t"  // 1-2  if(b & 0x80) (T =  8)
                    "mov %[next] , %[hi]"
-                   "\n\t" // 0-1    next = hi  (T =  9)
+                   "\n\t"  // 0-1    next = hi  (T =  9)
                    "nop"
-                   "\n\t" // 1                 (T = 10)
+                   "\n\t"  // 1                 (T = 10)
                    "out  %[port] , %[lo]"
-                   "\n\t" // 1    PORT = lo    (T = 11)
+                   "\n\t"  // 1    PORT = lo    (T = 11)
                    "sbiw %[count], 1"
-                   "\n\t" // 2    i--          (T = 13)
+                   "\n\t"  // 2    i--          (T = 13)
                    "brne headD"
-                   "\n\t" // 2    if(i != 0) -> (next byte)
+                   "\n\t"  // 2    if(i != 0) -> (next byte)
                    "rjmp doneD"
                    "\n\t"
                    "bitTimeD:"
-                   "\n\t" //      nop nop nop     (T =  4)
+                   "\n\t"  //      nop nop nop     (T =  4)
                    "out  %[port], %[next]"
-                   "\n\t" // 1    PORT = next     (T =  5)
+                   "\n\t"  // 1    PORT = next     (T =  5)
                    "mov  %[next], %[lo]"
-                   "\n\t" // 1    next = lo       (T =  6)
+                   "\n\t"  // 1    next = lo       (T =  6)
                    "rol  %[byte]"
-                   "\n\t" // 1    b <<= 1         (T =  7)
+                   "\n\t"  // 1    b <<= 1         (T =  7)
                    "sbrc %[byte], 7"
-                   "\n\t" // 1-2  if(b & 0x80)    (T =  8)
+                   "\n\t"  // 1-2  if(b & 0x80)    (T =  8)
                    "mov %[next], %[hi]"
-                   "\n\t" // 0-1   next = hi      (T =  9)
+                   "\n\t"  // 0-1   next = hi      (T =  9)
                    "nop"
-                   "\n\t" // 1                    (T = 10)
+                   "\n\t"  // 1                    (T = 10)
                    "out  %[port], %[lo]"
-                   "\n\t" // 1    PORT = lo       (T = 11)
+                   "\n\t"  // 1    PORT = lo       (T = 11)
                    "ret"
-                   "\n\t" // 4    nop nop nop nop (T = 15)
+                   "\n\t"  // 4    nop nop nop nop (T = 15)
                    "doneD:"
                    "\n"
                    : [byte] "+r"(b), [next] "+r"(next), [count] "+w"(i)
@@ -1296,16 +1289,16 @@ void Adafruit_NeoPixel::show(void) {
                      [hi] "r"(hi), [lo] "r"(lo));
 
 #if defined(PORTB) || defined(PORTC) || defined(PORTF)
-    } else // other PORT(s)
-#endif // defined(PORTB/C/F)
-#endif // defined(PORTD)
+    } else  // other PORT(s)
+#endif  // defined(PORTB/C/F)
+#endif  // defined(PORTD)
 
     // PORTB OUTPUT ----------------------------------------------------
 
 #if defined(PORTB)
 #if defined(PORTD) || defined(PORTC) || defined(PORTF)
-        if (port == &PORTB) {
-#endif // defined(PORTD/C/F)
+      if (port == &PORTB) {
+#endif  // defined(PORTD/C/F)
 
       hi = PORTB | pinMask;
       lo = PORTB & ~pinMask;
@@ -1397,15 +1390,15 @@ void Adafruit_NeoPixel::show(void) {
 #endif
 #if defined(PORTC) || defined(PORTF)
     else
-#endif // defined(PORTC/F)
-#endif // defined(PORTB)
+#endif  // defined(PORTC/F)
+#endif  // defined(PORTB)
 
     // PORTC OUTPUT ----------------------------------------------------
 
 #if defined(PORTC)
 #if defined(PORTD) || defined(PORTB) || defined(PORTF)
-        if (port == &PORTC) {
-#endif // defined(PORTD/B/F)
+      if (port == &PORTC) {
+#endif  // defined(PORTD/B/F)
 
       hi = PORTC | pinMask;
       lo = PORTC & ~pinMask;
@@ -1494,18 +1487,18 @@ void Adafruit_NeoPixel::show(void) {
 
 #if defined(PORTD) || defined(PORTB) || defined(PORTF)
     }
-#endif // defined(PORTD/B/F)
+#endif  // defined(PORTD/B/F)
 #if defined(PORTF)
     else
 #endif
-#endif // defined(PORTC)
+#endif  // defined(PORTC)
 
     // PORTF OUTPUT ----------------------------------------------------
 
 #if defined(PORTF)
 #if defined(PORTD) || defined(PORTB) || defined(PORTC)
-        if (port == &PORTF) {
-#endif // defined(PORTD/B/C)
+      if (port == &PORTF) {
+#endif  // defined(PORTD/B/C)
 
       hi = PORTF | pinMask;
       lo = PORTF & ~pinMask;
@@ -1594,11 +1587,11 @@ void Adafruit_NeoPixel::show(void) {
 
 #if defined(PORTD) || defined(PORTB) || defined(PORTC)
     }
-#endif // defined(PORTD/B/C)
-#endif // defined(PORTF)
+#endif  // defined(PORTD/B/C)
+#endif  // defined(PORTF)
 
 #if defined(NEO_KHZ400)
-  } else { // 400 KHz
+  } else {  // 400 KHz
 
     // 30 instruction clocks per bit: HHHHHHxxxxxxxxxLLLLLLLLLLLLLLL
     // ST instructions:               ^     ^        ^    (T=0,6,15)
@@ -1611,65 +1604,65 @@ void Adafruit_NeoPixel::show(void) {
     bit = 8;
 
     asm volatile("head30:"
-                 "\n\t" // Clk  Pseudocode    (T =  0)
+                 "\n\t"  // Clk  Pseudocode    (T =  0)
                  "st   %a[port], %[hi]"
-                 "\n\t" // 2    PORT = hi     (T =  2)
+                 "\n\t"  // 2    PORT = hi     (T =  2)
                  "sbrc %[byte] , 7"
-                 "\n\t" // 1-2  if(b & 128)
+                 "\n\t"  // 1-2  if(b & 128)
                  "mov  %[next], %[hi]"
-                 "\n\t" // 0-1   next = hi    (T =  4)
+                 "\n\t"  // 0-1   next = hi    (T =  4)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T =  6)
+                 "\n\t"  // 2    nop nop       (T =  6)
                  "st   %a[port], %[next]"
-                 "\n\t" // 2    PORT = next   (T =  8)
+                 "\n\t"  // 2    PORT = next   (T =  8)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 10)
+                 "\n\t"  // 2    nop nop       (T = 10)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 12)
+                 "\n\t"  // 2    nop nop       (T = 12)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 14)
+                 "\n\t"  // 2    nop nop       (T = 14)
                  "nop"
-                 "\n\t" // 1    nop           (T = 15)
+                 "\n\t"  // 1    nop           (T = 15)
                  "st   %a[port], %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 17)
+                 "\n\t"  // 2    PORT = lo     (T = 17)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 19)
+                 "\n\t"  // 2    nop nop       (T = 19)
                  "dec  %[bit]"
-                 "\n\t" // 1    bit--         (T = 20)
+                 "\n\t"  // 1    bit--         (T = 20)
                  "breq nextbyte30"
-                 "\n\t" // 1-2  if(bit == 0)
+                 "\n\t"  // 1-2  if(bit == 0)
                  "rol  %[byte]"
-                 "\n\t" // 1    b <<= 1       (T = 22)
+                 "\n\t"  // 1    b <<= 1       (T = 22)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 24)
+                 "\n\t"  // 2    nop nop       (T = 24)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 26)
+                 "\n\t"  // 2    nop nop       (T = 26)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 28)
+                 "\n\t"  // 2    nop nop       (T = 28)
                  "rjmp head30"
-                 "\n\t" // 2    -> head30 (next bit out)
+                 "\n\t"  // 2    -> head30 (next bit out)
                  "nextbyte30:"
-                 "\n\t" //                    (T = 22)
+                 "\n\t"  //                    (T = 22)
                  "nop"
-                 "\n\t" // 1    nop           (T = 23)
+                 "\n\t"  // 1    nop           (T = 23)
                  "ldi  %[bit]  , 8"
-                 "\n\t" // 1    bit = 8       (T = 24)
+                 "\n\t"  // 1    bit = 8       (T = 24)
                  "ld   %[byte] , %a[ptr]+"
-                 "\n\t" // 2    b = *ptr++    (T = 26)
+                 "\n\t"  // 2    b = *ptr++    (T = 26)
                  "sbiw %[count], 1"
-                 "\n\t" // 2    i--           (T = 28)
+                 "\n\t"  // 2    i--           (T = 28)
                  "brne head30"
-                 "\n" // 1-2  if(i != 0) -> (next byte)
+                 "\n"  // 1-2  if(i != 0) -> (next byte)
                  : [port] "+e"(port), [byte] "+r"(b), [bit] "+r"(bit),
                    [next] "+r"(next), [count] "+w"(i)
                  : [hi] "r"(hi), [lo] "r"(lo), [ptr] "e"(ptr));
   }
-#endif // NEO_KHZ400
+#endif  // NEO_KHZ400
 
 // 16 MHz(ish) AVR --------------------------------------------------------
 #elif (F_CPU >= 15400000UL) && (F_CPU <= 19000000L)
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
 
@@ -1687,55 +1680,55 @@ void Adafruit_NeoPixel::show(void) {
     bit = 8;
 
     asm volatile("head20%=:"
-                 "\n\t" // Clk  Pseudocode    (T =  0)
+                 "\n\t"  // Clk  Pseudocode    (T =  0)
                  "st   %a[port],  %[hi]"
-                 "\n\t" // 2    PORT = hi     (T =  2)
+                 "\n\t"  // 2    PORT = hi     (T =  2)
                  "sbrc %[byte],  7"
-                 "\n\t" // 1-2  if(b & 128)
+                 "\n\t"  // 1-2  if(b & 128)
                  "mov  %[next], %[hi]"
-                 "\n\t" // 0-1   next = hi    (T =  4)
+                 "\n\t"  // 0-1   next = hi    (T =  4)
                  "dec  %[bit]"
-                 "\n\t" // 1    bit--         (T =  5)
+                 "\n\t"  // 1    bit--         (T =  5)
                  "st   %a[port],  %[next]"
-                 "\n\t" // 2    PORT = next   (T =  7)
+                 "\n\t"  // 2    PORT = next   (T =  7)
                  "mov  %[next] ,  %[lo]"
-                 "\n\t" // 1    next = lo     (T =  8)
+                 "\n\t"  // 1    next = lo     (T =  8)
                  "breq nextbyte20%="
-                 "\n\t" // 1-2  if(bit == 0) (from dec above)
+                 "\n\t"  // 1-2  if(bit == 0) (from dec above)
                  "rol  %[byte]"
-                 "\n\t" // 1    b <<= 1       (T = 10)
+                 "\n\t"  // 1    b <<= 1       (T = 10)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 12)
+                 "\n\t"  // 2    nop nop       (T = 12)
                  "nop"
-                 "\n\t" // 1    nop           (T = 13)
+                 "\n\t"  // 1    nop           (T = 13)
                  "st   %a[port],  %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 15)
+                 "\n\t"  // 2    PORT = lo     (T = 15)
                  "nop"
-                 "\n\t" // 1    nop           (T = 16)
+                 "\n\t"  // 1    nop           (T = 16)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 18)
+                 "\n\t"  // 2    nop nop       (T = 18)
                  "rjmp head20%="
-                 "\n\t" // 2    -> head20 (next bit out)
+                 "\n\t"  // 2    -> head20 (next bit out)
                  "nextbyte20%=:"
-                 "\n\t" //                    (T = 10)
+                 "\n\t"  //                    (T = 10)
                  "ldi  %[bit]  ,  8"
-                 "\n\t" // 1    bit = 8       (T = 11)
+                 "\n\t"  // 1    bit = 8       (T = 11)
                  "ld   %[byte] ,  %a[ptr]+"
-                 "\n\t" // 2    b = *ptr++    (T = 13)
+                 "\n\t"  // 2    b = *ptr++    (T = 13)
                  "st   %a[port], %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 15)
+                 "\n\t"  // 2    PORT = lo     (T = 15)
                  "nop"
-                 "\n\t" // 1    nop           (T = 16)
+                 "\n\t"  // 1    nop           (T = 16)
                  "sbiw %[count], 1"
-                 "\n\t" // 2    i--           (T = 18)
+                 "\n\t"  // 2    i--           (T = 18)
                  "brne head20%="
-                 "\n" // 2    if(i != 0) -> (next byte)
+                 "\n"  // 2    if(i != 0) -> (next byte)
                  : [port] "+e"(port), [byte] "+r"(b), [bit] "+r"(bit),
                    [next] "+r"(next), [count] "+w"(i)
                  : [ptr] "e"(ptr), [hi] "r"(hi), [lo] "r"(lo));
 
 #if defined(NEO_KHZ400)
-  } else { // 400 KHz
+  } else {  // 400 KHz
 
     // The 400 KHz clock on 16 MHz MCU is the most 'relaxed' version.
 
@@ -1750,80 +1743,80 @@ void Adafruit_NeoPixel::show(void) {
     bit = 8;
 
     asm volatile("head40%=:"
-                 "\n\t" // Clk  Pseudocode    (T =  0)
+                 "\n\t"  // Clk  Pseudocode    (T =  0)
                  "st   %a[port], %[hi]"
-                 "\n\t" // 2    PORT = hi     (T =  2)
+                 "\n\t"  // 2    PORT = hi     (T =  2)
                  "sbrc %[byte] , 7"
-                 "\n\t" // 1-2  if(b & 128)
+                 "\n\t"  // 1-2  if(b & 128)
                  "mov  %[next] , %[hi]"
-                 "\n\t" // 0-1   next = hi    (T =  4)
+                 "\n\t"  // 0-1   next = hi    (T =  4)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T =  6)
+                 "\n\t"  // 2    nop nop       (T =  6)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T =  8)
+                 "\n\t"  // 2    nop nop       (T =  8)
                  "st   %a[port], %[next]"
-                 "\n\t" // 2    PORT = next   (T = 10)
+                 "\n\t"  // 2    PORT = next   (T = 10)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 12)
+                 "\n\t"  // 2    nop nop       (T = 12)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 14)
+                 "\n\t"  // 2    nop nop       (T = 14)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 16)
+                 "\n\t"  // 2    nop nop       (T = 16)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 18)
+                 "\n\t"  // 2    nop nop       (T = 18)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 20)
+                 "\n\t"  // 2    nop nop       (T = 20)
                  "st   %a[port], %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 22)
+                 "\n\t"  // 2    PORT = lo     (T = 22)
                  "nop"
-                 "\n\t" // 1    nop           (T = 23)
+                 "\n\t"  // 1    nop           (T = 23)
                  "mov  %[next] , %[lo]"
-                 "\n\t" // 1    next = lo     (T = 24)
+                 "\n\t"  // 1    next = lo     (T = 24)
                  "dec  %[bit]"
-                 "\n\t" // 1    bit--         (T = 25)
+                 "\n\t"  // 1    bit--         (T = 25)
                  "breq nextbyte40%="
-                 "\n\t" // 1-2  if(bit == 0)
+                 "\n\t"  // 1-2  if(bit == 0)
                  "rol  %[byte]"
-                 "\n\t" // 1    b <<= 1       (T = 27)
+                 "\n\t"  // 1    b <<= 1       (T = 27)
                  "nop"
-                 "\n\t" // 1    nop           (T = 28)
+                 "\n\t"  // 1    nop           (T = 28)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 30)
+                 "\n\t"  // 2    nop nop       (T = 30)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 32)
+                 "\n\t"  // 2    nop nop       (T = 32)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 34)
+                 "\n\t"  // 2    nop nop       (T = 34)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 36)
+                 "\n\t"  // 2    nop nop       (T = 36)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 38)
+                 "\n\t"  // 2    nop nop       (T = 38)
                  "rjmp head40%="
-                 "\n\t" // 2    -> head40 (next bit out)
+                 "\n\t"  // 2    -> head40 (next bit out)
                  "nextbyte40%=:"
-                 "\n\t" //                    (T = 27)
+                 "\n\t"  //                    (T = 27)
                  "ldi  %[bit]  , 8"
-                 "\n\t" // 1    bit = 8       (T = 28)
+                 "\n\t"  // 1    bit = 8       (T = 28)
                  "ld   %[byte] , %a[ptr]+"
-                 "\n\t" // 2    b = *ptr++    (T = 30)
+                 "\n\t"  // 2    b = *ptr++    (T = 30)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 32)
+                 "\n\t"  // 2    nop nop       (T = 32)
                  "st   %a[port], %[lo]"
-                 "\n\t" // 2    PORT = lo     (T = 34)
+                 "\n\t"  // 2    PORT = lo     (T = 34)
                  "rjmp .+0"
-                 "\n\t" // 2    nop nop       (T = 36)
+                 "\n\t"  // 2    nop nop       (T = 36)
                  "sbiw %[count], 1"
-                 "\n\t" // 2    i--           (T = 38)
+                 "\n\t"  // 2    i--           (T = 38)
                  "brne head40%="
-                 "\n" // 1-2  if(i != 0) -> (next byte)
+                 "\n"  // 1-2  if(i != 0) -> (next byte)
                  : [port] "+e"(port), [byte] "+r"(b), [bit] "+r"(bit),
                    [next] "+r"(next), [count] "+w"(i)
                  : [ptr] "e"(ptr), [hi] "r"(hi), [lo] "r"(lo));
   }
-#endif // NEO_KHZ400
+#endif  // NEO_KHZ400
 
 #else
 #error "CPU SPEED NOT SUPPORTED"
-#endif // end F_CPU ifdefs on __AVR__
+#endif  // end F_CPU ifdefs on __AVR__
 
   // END AVR ----------------------------------------------------------------
 
@@ -1890,8 +1883,7 @@ void Adafruit_NeoPixel::show(void) {
   // Use PIO
   rp2040Show(pixels, numBytes);
 
-#elif defined(TEENSYDUINO) &&                                                  \
-    defined(KINETISK) // Teensy 3.0, 3.1, 3.2, 3.5, 3.6
+#elif defined(TEENSYDUINO) && defined(KINETISK)  // Teensy 3.0, 3.1, 3.2, 3.5, 3.6
 #define CYCLES_800_T0H (F_CPU / 4000000)
 #define CYCLES_800_T1H (F_CPU / 1250000)
 #define CYCLES_800 (F_CPU / 800000)
@@ -1906,53 +1898,45 @@ void Adafruit_NeoPixel::show(void) {
   ARM_DEMCR |= ARM_DEMCR_TRCENA;
   ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     cyc = ARM_DWT_CYCCNT + CYCLES_800;
     while (p < end) {
       pix = *p++;
       for (mask = 0x80; mask; mask >>= 1) {
-        while (ARM_DWT_CYCCNT - cyc < CYCLES_800)
-          ;
+        while (ARM_DWT_CYCCNT - cyc < CYCLES_800);
         cyc = ARM_DWT_CYCCNT;
         *set = 1;
         if (pix & mask) {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T1H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T1H);
         } else {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T0H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T0H);
         }
         *clr = 1;
       }
     }
-    while (ARM_DWT_CYCCNT - cyc < CYCLES_800)
-      ;
+    while (ARM_DWT_CYCCNT - cyc < CYCLES_800);
 #if defined(NEO_KHZ400)
-  } else { // 400 kHz bitstream
+  } else {  // 400 kHz bitstream
     cyc = ARM_DWT_CYCCNT + CYCLES_400;
     while (p < end) {
       pix = *p++;
       for (mask = 0x80; mask; mask >>= 1) {
-        while (ARM_DWT_CYCCNT - cyc < CYCLES_400)
-          ;
+        while (ARM_DWT_CYCCNT - cyc < CYCLES_400);
         cyc = ARM_DWT_CYCCNT;
         *set = 1;
         if (pix & mask) {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T1H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T1H);
         } else {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T0H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T0H);
         }
         *clr = 1;
       }
     }
-    while (ARM_DWT_CYCCNT - cyc < CYCLES_400)
-      ;
+    while (ARM_DWT_CYCCNT - cyc < CYCLES_400);
   }
-#endif // NEO_KHZ400
+#endif  // NEO_KHZ400
 
 #elif defined(TEENSYDUINO) && (defined(__IMXRT1052__) || defined(__IMXRT1062__))
 #define CYCLES_800_T0H (F_CPU_ACTUAL / 4000000)
@@ -1969,55 +1953,47 @@ void Adafruit_NeoPixel::show(void) {
   ARM_DEMCR |= ARM_DEMCR_TRCENA;
   ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     cyc = ARM_DWT_CYCCNT + CYCLES_800;
     while (p < end) {
       pix = *p++;
       for (mask = 0x80; mask; mask >>= 1) {
-        while (ARM_DWT_CYCCNT - cyc < CYCLES_800)
-          ;
+        while (ARM_DWT_CYCCNT - cyc < CYCLES_800);
         cyc = ARM_DWT_CYCCNT;
         *set = msk;
         if (pix & mask) {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T1H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T1H);
         } else {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T0H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T0H);
         }
         *clr = msk;
       }
     }
-    while (ARM_DWT_CYCCNT - cyc < CYCLES_800)
-      ;
+    while (ARM_DWT_CYCCNT - cyc < CYCLES_800);
 #if defined(NEO_KHZ400)
-  } else { // 400 kHz bitstream
+  } else {  // 400 kHz bitstream
     cyc = ARM_DWT_CYCCNT + CYCLES_400;
     while (p < end) {
       pix = *p++;
       for (mask = 0x80; mask; mask >>= 1) {
-        while (ARM_DWT_CYCCNT - cyc < CYCLES_400)
-          ;
+        while (ARM_DWT_CYCCNT - cyc < CYCLES_400);
         cyc = ARM_DWT_CYCCNT;
         *set = msk;
         if (pix & mask) {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T1H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T1H);
         } else {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T0H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T0H);
         }
         *clr = msk;
       }
     }
-    while (ARM_DWT_CYCCNT - cyc < CYCLES_400)
-      ;
+    while (ARM_DWT_CYCCNT - cyc < CYCLES_400);
   }
-#endif // NEO_KHZ400
+#endif  // NEO_KHZ400
 
-#elif defined(TEENSYDUINO) && defined(__MKL26Z64__) // Teensy-LC
+#elif defined(TEENSYDUINO) && defined(__MKL26Z64__)  // Teensy-LC
 
 #if F_CPU == 48000000
   uint8_t *p = pixels, pix, count, dly, bitmask = digitalPinToBitMask(pin);
@@ -2158,7 +2134,7 @@ void Adafruit_NeoPixel::show(void) {
                : [bitmask] "r"(bitmask), [reg] "r"(reg));
 #else
 #error "Sorry, only 48 MHz is supported, please set Tools > CPU Speed to 48 MHz"
-#endif // F_CPU == 48000000
+#endif  // F_CPU == 48000000
 
   // Begin of support for nRF52 based boards  -------------------------
 
@@ -2189,16 +2165,16 @@ void Adafruit_NeoPixel::show(void) {
 // #define MAGIC_T1H              12UL | (0x8000) // 0.75us
 
 // WS2812B (rev B) timing is 0.4 and 0.8 us
-#define MAGIC_T0H 6UL | (0x8000)         // 0.375us
-#define MAGIC_T1H 13UL | (0x8000)        // 0.8125us
+#define MAGIC_T0H 6UL | (0x8000)          // 0.375us
+#define MAGIC_T1H 13UL | (0x8000)         // 0.8125us
 
 // WS2811 (400 khz) timing is 0.5 and 1.2
-#define MAGIC_T0H_400KHz 8UL | (0x8000)  // 0.5us
-#define MAGIC_T1H_400KHz 19UL | (0x8000) // 1.1875us
+#define MAGIC_T0H_400KHz 8UL | (0x8000)   // 0.5us
+#define MAGIC_T1H_400KHz 19UL | (0x8000)  // 1.1875us
 
 // For 400Khz, we double value of CTOPVAL
-#define CTOPVAL 20UL                     // 1.25us
-#define CTOPVAL_400KHz 40UL              // 2.5us
+#define CTOPVAL 20UL                      // 1.25us
+#define CTOPVAL_400KHz 40UL               // 2.5us
 
 // ---------- END Constants for the EasyDMA implementation -------------
 //
@@ -2210,13 +2186,13 @@ void Adafruit_NeoPixel::show(void) {
 // The number of cycles was hand picked and is guaranteed to be 100%
 // organic to preserve freshness and high accuracy.
 // ---------- BEGIN Constants for cycle counter implementation ---------
-#define CYCLES_800_T0H 18                // ~0.36 uS
-#define CYCLES_800_T1H 41                // ~0.76 uS
-#define CYCLES_800 71                    // ~1.25 uS
+#define CYCLES_800_T0H 18                 // ~0.36 uS
+#define CYCLES_800_T1H 41                 // ~0.76 uS
+#define CYCLES_800 71                     // ~1.25 uS
 
-#define CYCLES_400_T0H 26 // ~0.50 uS
-#define CYCLES_400_T1H 70 // ~1.26 uS
-#define CYCLES_400 156    // ~2.50 uS
+#define CYCLES_400_T0H 26  // ~0.50 uS
+#define CYCLES_400_T1H 70  // ~1.26 uS
+#define CYCLES_400 156     // ~2.50 uS
   // ---------- END of Constants for cycle counter implementation --------
 
   // To support both the SoftDevice + Neopixels we use the EasyDMA
@@ -2230,27 +2206,23 @@ void Adafruit_NeoPixel::show(void) {
   // If there is not enough memory, we will fall back to cycle counter
   // using DWT
   uint32_t pattern_size =
-      numBytes * 8 * sizeof(uint16_t) + 2 * sizeof(uint16_t);
+    numBytes * 8 * sizeof(uint16_t) + 2 * sizeof(uint16_t);
   uint16_t *pixels_pattern = NULL;
 
   NRF_PWM_Type *pwm = NULL;
 
   // Try to find a free PWM device, which is not enabled
   // and has no connected pins
-  NRF_PWM_Type *PWM[] = {NRF_PWM0, NRF_PWM1, NRF_PWM2
+  NRF_PWM_Type *PWM[] = { NRF_PWM0, NRF_PWM1, NRF_PWM2
 #if defined(NRF_PWM3)
-                         ,
-                         NRF_PWM3
+                          ,
+                          NRF_PWM3
 #endif
   };
 
   for (unsigned int device = 0; device < (sizeof(PWM) / sizeof(PWM[0]));
        device++) {
-    if ((PWM[device]->ENABLE == 0) &&
-        (PWM[device]->PSEL.OUT[0] & PWM_PSEL_OUT_CONNECT_Msk) &&
-        (PWM[device]->PSEL.OUT[1] & PWM_PSEL_OUT_CONNECT_Msk) &&
-        (PWM[device]->PSEL.OUT[2] & PWM_PSEL_OUT_CONNECT_Msk) &&
-        (PWM[device]->PSEL.OUT[3] & PWM_PSEL_OUT_CONNECT_Msk)) {
+    if ((PWM[device]->ENABLE == 0) && (PWM[device]->PSEL.OUT[0] & PWM_PSEL_OUT_CONNECT_Msk) && (PWM[device]->PSEL.OUT[1] & PWM_PSEL_OUT_CONNECT_Msk) && (PWM[device]->PSEL.OUT[2] & PWM_PSEL_OUT_CONNECT_Msk) && (PWM[device]->PSEL.OUT[3] & PWM_PSEL_OUT_CONNECT_Msk)) {
       pwm = PWM[device];
       break;
     }
@@ -2258,7 +2230,7 @@ void Adafruit_NeoPixel::show(void) {
 
   // only malloc if there is PWM device available
   if (pwm != NULL) {
-#if defined(ARDUINO_NRF52_ADAFRUIT) // use thread-safe malloc
+#if defined(ARDUINO_NRF52_ADAFRUIT)  // use thread-safe malloc
     pixels_pattern = (uint16_t *)rtos_malloc(pattern_size);
 #else
     pixels_pattern = (uint16_t *)malloc(pattern_size);
@@ -2268,7 +2240,7 @@ void Adafruit_NeoPixel::show(void) {
   // Use the identified device to choose the implementation
   // If a PWM device is available use DMA
   if ((pixels_pattern != NULL) && (pwm != NULL)) {
-    uint16_t pos = 0; // bit position
+    uint16_t pos = 0;  // bit position
 
     for (uint16_t n = 0; n < numBytes; n++) {
       uint8_t pix = pixels[n];
@@ -2277,7 +2249,7 @@ void Adafruit_NeoPixel::show(void) {
 #if defined(NEO_KHZ400)
         if (!is800KHz) {
           pixels_pattern[pos] =
-              (pix & mask) ? MAGIC_T1H_400KHz : MAGIC_T0H_400KHz;
+            (pix & mask) ? MAGIC_T1H_400KHz : MAGIC_T0H_400KHz;
         } else
 #endif
         {
@@ -2289,15 +2261,15 @@ void Adafruit_NeoPixel::show(void) {
     }
 
     // Zero padding to indicate the end of que sequence
-    pixels_pattern[pos++] = 0 | (0x8000); // Seq end
-    pixels_pattern[pos++] = 0 | (0x8000); // Seq end
+    pixels_pattern[pos++] = 0 | (0x8000);  // Seq end
+    pixels_pattern[pos++] = 0 | (0x8000);  // Seq end
 
     // Set the wave mode to count UP
     pwm->MODE = (PWM_MODE_UPDOWN_Up << PWM_MODE_UPDOWN_Pos);
 
     // Set the PWM to use the 16MHz clock
     pwm->PRESCALER =
-        (PWM_PRESCALER_PRESCALER_DIV_1 << PWM_PRESCALER_PRESCALER_Pos);
+      (PWM_PRESCALER_PRESCALER_DIV_1 << PWM_PRESCALER_PRESCALER_Pos);
 
     // Setting of the maximum count
     // but keeping it on 16Mhz allows for more granularity just
@@ -2317,8 +2289,7 @@ void Adafruit_NeoPixel::show(void) {
     // On the "Common" setting the PWM uses the same pattern for the
     // for supported sequences. The pattern is stored on half-word
     // of 16bits
-    pwm->DECODER = (PWM_DECODER_LOAD_Common << PWM_DECODER_LOAD_Pos) |
-                   (PWM_DECODER_MODE_RefreshCount << PWM_DECODER_MODE_Pos);
+    pwm->DECODER = (PWM_DECODER_LOAD_Common << PWM_DECODER_LOAD_Pos) | (PWM_DECODER_MODE_RefreshCount << PWM_DECODER_MODE_Pos);
 
     // Pointer to the memory storing the patter
     pwm->SEQ[0].PTR = (uint32_t)(pixels_pattern) << PWM_SEQ_PTR_PTR_Pos;
@@ -2370,12 +2341,12 @@ void Adafruit_NeoPixel::show(void) {
 
     pwm->PSEL.OUT[0] = 0xFFFFFFFFUL;
 
-#if defined(ARDUINO_NRF52_ADAFRUIT) // use thread-safe free
+#if defined(ARDUINO_NRF52_ADAFRUIT)  // use thread-safe free
     rtos_free(pixels_pattern);
 #else
     free(pixels_pattern);
 #endif
-  } // End of DMA implementation
+  }  // End of DMA implementation
   // ---------------------------------------------------------------------
   else {
 #ifndef ARDUINO_ARCH_NRF52840
@@ -2423,25 +2394,21 @@ void Adafruit_NeoPixel::show(void) {
         uint8_t pix = *p++;
 
         for (uint8_t mask = 0x80; mask; mask >>= 1) {
-          while (DWT->CYCCNT - cyc < CYCLES_X00)
-            ;
+          while (DWT->CYCCNT - cyc < CYCLES_X00);
           cyc = DWT->CYCCNT;
 
           nrf_port->OUTSET |= pinMask;
 
           if (pix & mask) {
-            while (DWT->CYCCNT - cyc < CYCLES_X00_T1H)
-              ;
+            while (DWT->CYCCNT - cyc < CYCLES_X00_T1H);
           } else {
-            while (DWT->CYCCNT - cyc < CYCLES_X00_T0H)
-              ;
+            while (DWT->CYCCNT - cyc < CYCLES_X00_T0H);
           }
 
           nrf_port->OUTCLR |= pinMask;
         }
       }
-      while (DWT->CYCCNT - cyc < CYCLES_X00)
-        ;
+      while (DWT->CYCCNT - cyc < CYCLES_X00);
 
       // If total time longer than 25%, resend the whole data.
       // Since we are likely to be interrupted by SoftDevice
@@ -2463,9 +2430,7 @@ void Adafruit_NeoPixel::show(void) {
   }
   // END of NRF52 implementation
 
-#elif defined(__SAMD21E17A__) || defined(__SAMD21G18A__) ||                    \
-    defined(__SAMD21E18A__) || defined(__SAMD21J18A__) ||                      \
-    defined(__SAMD11C14A__) || defined(__SAMD21G17A__)
+#elif defined(__SAMD21E17A__) || defined(__SAMD21G18A__) || defined(__SAMD21E18A__) || defined(__SAMD21J18A__) || defined(__SAMD11C14A__) || defined(__SAMD21G17A__)
   // Arduino Zero, Gemma/Trinket M0, SODAQ Autonomo
   // and others
   // Tried this with a timer/counter, couldn't quite get adequate
@@ -2484,7 +2449,7 @@ void Adafruit_NeoPixel::show(void) {
   volatile uint32_t *set = &(PORT->Group[portNum].OUTSET.reg),
                     *clr = &(PORT->Group[portNum].OUTCLR.reg);
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     for (;;) {
@@ -2511,7 +2476,7 @@ void Adafruit_NeoPixel::show(void) {
       }
     }
 #if defined(NEO_KHZ400)
-  } else { // 400 KHz bitstream
+  } else {  // 400 KHz bitstream
     for (;;) {
       *set = pinMask;
       asm("nop; nop; nop; nop; nop; nop; nop; nop; nop; nop; nop;");
@@ -2545,9 +2510,7 @@ void Adafruit_NeoPixel::show(void) {
 #endif
 
 //----
-#elif defined(XMC1100_XMC2GO) || defined(XMC1400_Arduino_Kit) ||               \
-    defined(XMC1100_H_BRIDGE2GO) || defined(XMC1100_Boot_Kit) ||               \
-    defined(XMC1300_Boot_Kit)
+#elif defined(XMC1100_XMC2GO) || defined(XMC1400_Arduino_Kit) || defined(XMC1100_H_BRIDGE2GO) || defined(XMC1100_Boot_Kit) || defined(XMC1300_Boot_Kit)
 
   // XMC1100/1200/1300 with ARM Cortex M0 are running with 32MHz, XMC1400 runs
   // with 48MHz so may not work Tried this with a timer/counter, couldn't quite
@@ -2567,7 +2530,7 @@ void Adafruit_NeoPixel::show(void) {
   uint32_t omrhigh = (uint32_t)XMC_GPIO_OUTPUT_LEVEL_HIGH << XMC_pin;
   uint32_t omrlow = (uint32_t)XMC_GPIO_OUTPUT_LEVEL_LOW << XMC_pin;
 
-#ifdef NEO_KHZ400 // 800 KHz check needed only if 400 KHz support enabled
+#ifdef NEO_KHZ400  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     for (;;) {
@@ -2591,8 +2554,8 @@ void Adafruit_NeoPixel::show(void) {
         bitMask = 0x80;
       }
     }
-#ifdef NEO_KHZ400 // untested code
-  } else { // 400 KHz bitstream
+#ifdef NEO_KHZ400  // untested code
+  } else {  // 400 KHz bitstream
     for (;;) {
       XMC_port->OMR = omrhigh;
       asm("nop; nop; nop; nop; nop;");
@@ -2642,7 +2605,7 @@ void Adafruit_NeoPixel::show(void) {
   uint32_t omrhigh = (uint32_t)XMC_GPIO_OUTPUT_LEVEL_HIGH << XMC_pin;
   uint32_t omrlow = (uint32_t)XMC_GPIO_OUTPUT_LEVEL_LOW << XMC_pin;
 
-#ifdef NEO_KHZ400 // 800 KHz check needed only if 400 KHz support enabled
+#ifdef NEO_KHZ400  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
 
@@ -2707,13 +2670,13 @@ void Adafruit_NeoPixel::show(void) {
     }
 
 #ifdef NEO_KHZ400
-  } else { // 400 KHz bitstream
+  } else {  // 400 KHz bitstream
     // ToDo!
   }
 #endif
   //----
 
-#elif defined(__SAMD51__) // M4
+#elif defined(__SAMD51__)  // M4
 
   uint8_t *ptr, *end, p, bitMask, portNum;
   uint32_t pinMask;
@@ -2746,44 +2709,42 @@ void Adafruit_NeoPixel::show(void) {
 
   uint32_t t0, t1, top, ticks, saveLoad = SysTick->LOAD, saveVal = SysTick->VAL;
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
-    top = (uint32_t)(F_CPU * 0.00000125);      // Bit hi + lo = 1.25 uS
-    t0 = top - (uint32_t)(F_CPU * 0.00000040); // 0 = 0.4 uS hi
-    t1 = top - (uint32_t)(F_CPU * 0.00000080); // 1 = 0.8 uS hi
+    top = (uint32_t)(F_CPU * 0.00000125);       // Bit hi + lo = 1.25 uS
+    t0 = top - (uint32_t)(F_CPU * 0.00000040);  // 0 = 0.4 uS hi
+    t1 = top - (uint32_t)(F_CPU * 0.00000080);  // 1 = 0.8 uS hi
 #if defined(NEO_KHZ400)
-  } else {                                     // 400 KHz bitstream
-    top = (uint32_t)(F_CPU * 0.00000250);      // Bit hi + lo = 2.5 uS
-    t0 = top - (uint32_t)(F_CPU * 0.00000050); // 0 = 0.5 uS hi
-    t1 = top - (uint32_t)(F_CPU * 0.00000120); // 1 = 1.2 uS hi
+  } else {                                      // 400 KHz bitstream
+    top = (uint32_t)(F_CPU * 0.00000250);       // Bit hi + lo = 2.5 uS
+    t0 = top - (uint32_t)(F_CPU * 0.00000050);  // 0 = 0.5 uS hi
+    t1 = top - (uint32_t)(F_CPU * 0.00000120);  // 1 = 1.2 uS hi
   }
 #endif
 
-  SysTick->LOAD = top; // Config SysTick for NeoPixel bit freq
-  SysTick->VAL = top;  // Set to start value (counts down)
-  (void)SysTick->VAL;  // Dummy read helps sync up 1st bit
+  SysTick->LOAD = top;  // Config SysTick for NeoPixel bit freq
+  SysTick->VAL = top;   // Set to start value (counts down)
+  (void)SysTick->VAL;   // Dummy read helps sync up 1st bit
 
   for (;;) {
-    *set = pinMask;                  // Set output high
-    ticks = (p & bitMask) ? t1 : t0; // SysTick threshold,
-    while (SysTick->VAL > ticks)
-      ;                     // wait for it
-    *clr = pinMask;         // Set output low
-    if (!(bitMask >>= 1)) { // Next bit for this byte...done?
+    *set = pinMask;                   // Set output high
+    ticks = (p & bitMask) ? t1 : t0;  // SysTick threshold,
+    while (SysTick->VAL > ticks);     // wait for it
+    *clr = pinMask;                   // Set output low
+    if (!(bitMask >>= 1)) {           // Next bit for this byte...done?
       if (ptr >= end)
-        break;        // If last byte sent, exit loop
-      p = *ptr++;     // Fetch next byte
-      bitMask = 0x80; // Reset bitmask
+        break;         // If last byte sent, exit loop
+      p = *ptr++;      // Fetch next byte
+      bitMask = 0x80;  // Reset bitmask
     }
-    while (SysTick->VAL <= ticks)
-      ; // Wait for rollover to 'top'
+    while (SysTick->VAL <= ticks);  // Wait for rollover to 'top'
   }
 
-  SysTick->LOAD = saveLoad; // Restore SysTick rollover to 1 ms
-  SysTick->VAL = saveVal;   // Restore SysTick value
+  SysTick->LOAD = saveLoad;  // Restore SysTick rollover to 1 ms
+  SysTick->VAL = saveVal;    // Restore SysTick value
 
-#elif defined(ARDUINO_STM32_FEATHER) // FEATHER WICED (120MHz)
+#elif defined(ARDUINO_STM32_FEATHER)  // FEATHER WICED (120MHz)
 
   // Tried this with a timer/counter, couldn't quite get adequate
   // resolution. So yay, you get a load of goofball NOPs...
@@ -2800,11 +2761,11 @@ void Adafruit_NeoPixel::show(void) {
   volatile uint16_t *set = &(PIN_MAP[pin].gpio_device->regs->BSRRL);
   volatile uint16_t *clr = &(PIN_MAP[pin].gpio_device->regs->BSRRH);
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     for (;;) {
-      if (p & bitMask) { // ONE
+      if (p & bitMask) {  // ONE
         // High 800ns
         *set = pinMask;
         asm("nop; nop; nop; nop; nop; nop; nop; nop;"
@@ -2826,7 +2787,7 @@ void Adafruit_NeoPixel::show(void) {
             "nop; nop; nop; nop; nop; nop; nop; nop;"
             "nop; nop; nop; nop; nop; nop; nop; nop;"
             "nop; nop; nop; nop; nop; nop;");
-      } else { // ZERO
+      } else {  // ZERO
         // High 400ns
         *set = pinMask;
         asm("nop; nop; nop; nop; nop; nop; nop; nop;"
@@ -2861,7 +2822,7 @@ void Adafruit_NeoPixel::show(void) {
       }
     }
 #if defined(NEO_KHZ400)
-  } else { // 400 KHz bitstream
+  } else {  // 400 KHz bitstream
     // ToDo!
   }
 #endif
@@ -2873,7 +2834,7 @@ void Adafruit_NeoPixel::show(void) {
   p = *ptr++;
   bitMask = 0x80;
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     for (;;) {
@@ -2906,28 +2867,26 @@ void Adafruit_NeoPixel::show(void) {
       }
     }
 #if defined(NEO_KHZ400)
-  } else { // 400 KHz bitstream
+  } else {  // 400 KHz bitstream
     // ToDo!
   }
 #endif
-#elif defined(ARDUINO_ARCH_STM32) ||                                           \
-    defined(ARDUINO_ARCH_ARDUINO_CORE_STM32) || defined(_PY32_DEF_)
+#elif defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_ARDUINO_CORE_STM32) || defined(_PY32_DEF_)
   uint8_t *p = pixels, *end = p + numBytes, pix = *p++, mask = 0x80;
   uint32_t cyc;
   uint32_t saveLoad = SysTick->LOAD, saveVal = SysTick->VAL;
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
-    uint32_t top = (F_CPU / 800000);       // 1.25µs
-    uint32_t t0 = top - (F_CPU / 2500000); // 0.4µs
-    uint32_t t1 = top - (F_CPU / 1250000); // 0.8µs
-    SysTick->LOAD = top - 1; // Config SysTick for NeoPixel bit freq
-    SysTick->VAL = 0;        // Set to start value
+    uint32_t top = (F_CPU / 800000);        // 1.25µs
+    uint32_t t0 = top - (F_CPU / 2500000);  // 0.4µs
+    uint32_t t1 = top - (F_CPU / 1250000);  // 0.8µs
+    SysTick->LOAD = top - 1;                // Config SysTick for NeoPixel bit freq
+    SysTick->VAL = 0;                       // Set to start value
     for (;;) {
       LL_GPIO_SetOutputPin(gpioPort, gpioPin);
       cyc = (pix & mask) ? t1 : t0;
-      while (SysTick->VAL > cyc)
-        ;
+      while (SysTick->VAL > cyc);
       LL_GPIO_ResetOutputPin(gpioPort, gpioPin);
       if (!(mask >>= 1)) {
         if (p >= end)
@@ -2935,21 +2894,19 @@ void Adafruit_NeoPixel::show(void) {
         pix = *p++;
         mask = 0x80;
       }
-      while (SysTick->VAL <= cyc)
-        ;
+      while (SysTick->VAL <= cyc);
     }
 #if defined(NEO_KHZ400)
-  } else {                                 // 400 kHz bitstream
-    uint32_t top = (F_CPU / 400000);       // 2.5µs
-    uint32_t t0 = top - (F_CPU / 2000000); // 0.5µs
-    uint32_t t1 = top - (F_CPU / 833333);  // 1.2µs
-    SysTick->LOAD = top - 1; // Config SysTick for NeoPixel bit freq
-    SysTick->VAL = 0;        // Set to start value
+  } else {                                  // 400 kHz bitstream
+    uint32_t top = (F_CPU / 400000);        // 2.5µs
+    uint32_t t0 = top - (F_CPU / 2000000);  // 0.5µs
+    uint32_t t1 = top - (F_CPU / 833333);   // 1.2µs
+    SysTick->LOAD = top - 1;                // Config SysTick for NeoPixel bit freq
+    SysTick->VAL = 0;                       // Set to start value
     for (;;) {
       LL_GPIO_SetOutputPin(gpioPort, gpioPin);
       cyc = (pix & mask) ? t1 : t0;
-      while (SysTick->VAL > cyc)
-        ;
+      while (SysTick->VAL > cyc);
       LL_GPIO_ResetOutputPin(gpioPort, gpioPin);
       if (!(mask >>= 1)) {
         if (p >= end)
@@ -2957,13 +2914,12 @@ void Adafruit_NeoPixel::show(void) {
         pix = *p++;
         mask = 0x80;
       }
-      while (SysTick->VAL <= cyc)
-        ;
+      while (SysTick->VAL <= cyc);
     }
   }
-#endif // NEO_KHZ400
-  SysTick->LOAD = saveLoad; // Restore SysTick rollover to 1 ms
-  SysTick->VAL = saveVal;   // Restore SysTick value
+#endif  // NEO_KHZ400
+  SysTick->LOAD = saveLoad;  // Restore SysTick rollover to 1 ms
+  SysTick->VAL = saveVal;    // Restore SysTick value
 #elif defined(NRF51)
   uint8_t *p = pixels, pix, count, mask;
   int32_t num = numBytes;
@@ -2972,97 +2928,97 @@ void Adafruit_NeoPixel::show(void) {
 
   // volatile unsigned int *reg = (unsigned int *)(0x50000000UL + 0x508);
   volatile uint32_t *reg =
-      (uint32_t *)(NRF_GPIO_BASE + offsetof(NRF_GPIO_Type, OUTSET));
+    (uint32_t *)(NRF_GPIO_BASE + offsetof(NRF_GPIO_Type, OUTSET));
 
   // https://github.com/sandeepmistry/arduino-nRF5/blob/dc53980c8bac27898fca90d8ecb268e11111edc1/cores/nRF5/SDK/components/device/nrf51.h
   // http://www.iot-programmer.com/index.php/books/27-micro-bit-iot-in-c/chapters-micro-bit-iot-in-c/47-micro-bit-iot-in-c-fast-memory-mapped-gpio?showall=1
   // https://github.com/Microsoft/pxt-neopixel/blob/master/sendbuffer.asm
 
   asm volatile(
-      // "cpsid i" ; disable irq
+    // "cpsid i" ; disable irq
 
-      //    b .start
-      "b  L%=_start"
-      "\n\t"
-      // .nextbit:               ;            C0
-      "L%=_nextbit:"
-      "\n\t" //;            C0
-      //    str r1, [r3, #0]    ; pin := hi  C2
-      "str %[bitmask], [%[reg], #0]"
-      "\n\t" //; pin := hi  C2
-      //    tst r6, r0          ;            C3
-      "tst %[mask], %[pix]"
-      "\n\t" //          ;            C3
-      //    bne .islate         ;            C4
-      "bne L%=_islate"
-      "\n\t" //;            C4
-      //    str r1, [r2, #0]    ; pin := lo  C6
-      "str %[bitmask], [%[reg], #4]"
-      "\n\t" //; pin := lo  C6
-      // .islate:
-      "L%=_islate:"
-      "\n\t"
-      //    lsrs r6, r6, #1     ; r6 >>= 1   C7
-      "lsr %[mask], %[mask], #1"
-      "\n\t" //; r6 >>= 1   C7
-      //    bne .justbit        ;            C8
-      "bne L%=_justbit"
-      "\n\t" //;            C8
+    //    b .start
+    "b  L%=_start"
+    "\n\t"
+    // .nextbit:               ;            C0
+    "L%=_nextbit:"
+    "\n\t"  //;            C0
+    //    str r1, [r3, #0]    ; pin := hi  C2
+    "str %[bitmask], [%[reg], #0]"
+    "\n\t"  //; pin := hi  C2
+    //    tst r6, r0          ;            C3
+    "tst %[mask], %[pix]"
+    "\n\t"  //          ;            C3
+    //    bne .islate         ;            C4
+    "bne L%=_islate"
+    "\n\t"  //;            C4
+    //    str r1, [r2, #0]    ; pin := lo  C6
+    "str %[bitmask], [%[reg], #4]"
+    "\n\t"  //; pin := lo  C6
+    // .islate:
+    "L%=_islate:"
+    "\n\t"
+    //    lsrs r6, r6, #1     ; r6 >>= 1   C7
+    "lsr %[mask], %[mask], #1"
+    "\n\t"  //; r6 >>= 1   C7
+    //    bne .justbit        ;            C8
+    "bne L%=_justbit"
+    "\n\t"  //;            C8
 
-      //    ; not just a bit - need new byte
-      //    adds r4, #1         ; r4++       C9
-      "add %[p], #1"
-      "\n\t" //; r4++       C9
-      //    subs r5, #1         ; r5--       C10
-      "sub %[num], #1"
-      "\n\t" //; r5--       C10
-      //    bcc .stop           ; if (r5<0) goto .stop  C11
-      "bcc L%=_stop"
-      "\n\t" //; if (r5<0) goto .stop  C11
-      // .start:
-      "L%=_start:"
-      //    movs r6, #0x80      ; reset mask C12
-      "movs %[mask], #0x80"
-      "\n\t" //; reset mask C12
-      //    nop                 ;            C13
-      "nop"
-      "\n\t" //;            C13
+    //    ; not just a bit - need new byte
+    //    adds r4, #1         ; r4++       C9
+    "add %[p], #1"
+    "\n\t"  //; r4++       C9
+    //    subs r5, #1         ; r5--       C10
+    "sub %[num], #1"
+    "\n\t"  //; r5--       C10
+    //    bcc .stop           ; if (r5<0) goto .stop  C11
+    "bcc L%=_stop"
+    "\n\t"  //; if (r5<0) goto .stop  C11
+    // .start:
+    "L%=_start:"
+    //    movs r6, #0x80      ; reset mask C12
+    "movs %[mask], #0x80"
+    "\n\t"  //; reset mask C12
+    //    nop                 ;            C13
+    "nop"
+    "\n\t"  //;            C13
 
-      // .common:               ;             C13
-      "L%=_common:"
-      "\n\t" //;            C13
-      //    str r1, [r2, #0]   ; pin := lo   C15
-      "str %[bitmask], [%[reg], #4]"
-      "\n\t" //; pin := lo  C15
-      //    ; always re-load byte - it just fits with the cycles better this way
-      //    ldrb r0, [r4, #0]  ; r0 := *r4   C17
-      "ldrb  %[pix], [%[p], #0]"
-      "\n\t" //; r0 := *r4   C17
-      //    b .nextbit         ;             C20
-      "b L%=_nextbit"
-      "\n\t" //;             C20
+    // .common:               ;             C13
+    "L%=_common:"
+    "\n\t"  //;            C13
+    //    str r1, [r2, #0]   ; pin := lo   C15
+    "str %[bitmask], [%[reg], #4]"
+    "\n\t"  //; pin := lo  C15
+    //    ; always re-load byte - it just fits with the cycles better this way
+    //    ldrb r0, [r4, #0]  ; r0 := *r4   C17
+    "ldrb  %[pix], [%[p], #0]"
+    "\n\t"  //; r0 := *r4   C17
+    //    b .nextbit         ;             C20
+    "b L%=_nextbit"
+    "\n\t"  //;             C20
 
-      // .justbit: ; C10
-      "L%=_justbit:"
-      "\n\t" //; C10
-      //    ; no nops, branch taken is already 3 cycles
-      //    b .common ; C13
-      "b L%=_common"
-      "\n\t" //; C13
+    // .justbit: ; C10
+    "L%=_justbit:"
+    "\n\t"  //; C10
+    //    ; no nops, branch taken is already 3 cycles
+    //    b .common ; C13
+    "b L%=_common"
+    "\n\t"  //; C13
 
-      // .stop:
-      "L%=_stop:"
-      "\n\t"
-      //    str r1, [r2, #0]   ; pin := lo
-      "str %[bitmask], [%[reg], #4]"
-      "\n\t" //; pin := lo
-      //    cpsie i            ; enable irq
+    // .stop:
+    "L%=_stop:"
+    "\n\t"
+    //    str r1, [r2, #0]   ; pin := lo
+    "str %[bitmask], [%[reg], #4]"
+    "\n\t"  //; pin := lo
+    //    cpsie i            ; enable irq
 
-      : [p] "+r"(p), [pix] "=&r"(pix), [count] "=&r"(count), [mask] "=&r"(mask),
-        [num] "+r"(num)
-      : [bitmask] "r"(bitmask), [reg] "r"(reg));
+    : [p] "+r"(p), [pix] "=&r"(pix), [count] "=&r"(count), [mask] "=&r"(mask),
+      [num] "+r"(num)
+    : [bitmask] "r"(bitmask), [reg] "r"(reg));
 
-#elif defined(__SAM3X8E__) // Arduino Due
+#elif defined(__SAM3X8E__)  // Arduino Due
 
 #define SCALE VARIANT_MCK / 2UL / 1000000UL
 #define INST (2UL * F_CPU / VARIANT_MCK)
@@ -3084,25 +3040,25 @@ void Adafruit_NeoPixel::show(void) {
                TC_CMR_WAVE | TC_CMR_WAVSEL_UP | TC_CMR_TCCLKS_TIMER_CLOCK1);
   TC_Start(TC1, 0);
 
-  pinMask = g_APinDescription[pin].ulPin;  // Don't 'optimize' these into
-  port = g_APinDescription[pin].pPort;     // declarations above. Want to
-  portSet = &(port->PIO_SODR);             // burn a few cycles after
-  portClear = &(port->PIO_CODR);           // starting timer to minimize
-  timeValue = &(TC1->TC_CHANNEL[0].TC_CV); // the initial 'while'.
+  pinMask = g_APinDescription[pin].ulPin;   // Don't 'optimize' these into
+  port = g_APinDescription[pin].pPort;      // declarations above. Want to
+  portSet = &(port->PIO_SODR);              // burn a few cycles after
+  portClear = &(port->PIO_CODR);            // starting timer to minimize
+  timeValue = &(TC1->TC_CHANNEL[0].TC_CV);  // the initial 'while'.
   timeReset = &(TC1->TC_CHANNEL[0].TC_CCR);
   p = pixels;
   end = p + numBytes;
   pix = *p++;
   mask = 0x80;
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     time0 = TIME_800_0;
     time1 = TIME_800_1;
     period = PERIOD_800;
 #if defined(NEO_KHZ400)
-  } else { // 400 KHz bitstream
+  } else {  // 400 KHz bitstream
     time0 = TIME_400_0;
     time1 = TIME_400_1;
     period = PERIOD_400;
@@ -3112,39 +3068,34 @@ void Adafruit_NeoPixel::show(void) {
   for (t = time0;; t = time0) {
     if (pix & mask)
       t = time1;
-    while (*timeValue < (unsigned)period)
-      ;
+    while (*timeValue < (unsigned)period);
     *portSet = pinMask;
     *timeReset = TC_CCR_CLKEN | TC_CCR_SWTRG;
-    while (*timeValue < (unsigned)t)
-      ;
+    while (*timeValue < (unsigned)t);
     *portClear = pinMask;
-    if (!(mask >>= 1)) { // This 'inside-out' loop logic utilizes
+    if (!(mask >>= 1)) {  // This 'inside-out' loop logic utilizes
       if (p >= end)
-        break; // idle time to minimize inter-byte delays.
+        break;  // idle time to minimize inter-byte delays.
       pix = *p++;
       mask = 0x80;
     }
   }
-  while (*timeValue < (unsigned)period)
-    ; // Wait for last bit
+  while (*timeValue < (unsigned)period);  // Wait for last bit
   TC_Stop(TC1, 0);
 
 // RENESAS including Arduino UNO R4 + STM32H7 Arduino Portenta H7 (Dual Core
 // M7+M4) / Arduino Giga R1
-#elif defined(ARDUINO_ARCH_RENESAS) || defined(ARDUINO_ARCH_RENESAS_UNO) ||    \
-    defined(ARDUINO_ARCH_RENESAS_PORTENTA) ||                                  \
-    defined(ARDUINO_ARCH_MBED_PORTENTA) || defined(ARDUINO_ARCH_MBED_GIGA)
+#elif defined(ARDUINO_ARCH_RENESAS) || defined(ARDUINO_ARCH_RENESAS_UNO) || defined(ARDUINO_ARCH_RENESAS_PORTENTA) || defined(ARDUINO_ARCH_MBED_PORTENTA) || defined(ARDUINO_ARCH_MBED_GIGA)
 
 // Definition for a single channel clockless controller for RA4M1 (Cortex M4)
 // See clockless.h for detailed info on how the template parameters are used.
-#define ARM_DEMCR                                                              \
-  (*(volatile uint32_t *)0xE000EDFC) // Debug Exception and Monitor Control
-#define ARM_DEMCR_TRCENA (1 << 24)   // Enable debugging & monitoring blocks
-#define ARM_DWT_CTRL (*(volatile uint32_t *)0xE0001000) // DWT control register
-#define ARM_DWT_CTRL_CYCCNTENA (1 << 0)                 // Enable cycle count
-#define ARM_DWT_CYCCNT                                                         \
-  (*(volatile uint32_t *)0xE0001004) // Cycle count register
+#define ARM_DEMCR \
+  (*(volatile uint32_t *)0xE000EDFC)                     // Debug Exception and Monitor Control
+#define ARM_DEMCR_TRCENA (1 << 24)                       // Enable debugging & monitoring blocks
+#define ARM_DWT_CTRL (*(volatile uint32_t *)0xE0001000)  // DWT control register
+#define ARM_DWT_CTRL_CYCCNTENA (1 << 0)                  // Enable cycle count
+#define ARM_DWT_CYCCNT \
+  (*(volatile uint32_t *)0xE0001004)  // Cycle count register
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GIGA)
 #define F_CPU 480000000
@@ -3169,7 +3120,7 @@ void Adafruit_NeoPixel::show(void) {
 #else
   bsp_io_port_pin_t io_pin = g_pin_cfg[pin].pin;
 // Macro to calculate the port base address for the given pin
-#define PIN_IO_PORT_ADDR(pn)                                                   \
+#define PIN_IO_PORT_ADDR(pn) \
   (R_PORT0 + ((uint32_t)(R_PORT1 - R_PORT0) * ((pn) >> 8u)))
 
   volatile uint16_t *set = &(PIN_IO_PORT_ADDR(io_pin)->POSR);
@@ -3183,7 +3134,7 @@ void Adafruit_NeoPixel::show(void) {
   ARM_DEMCR |= ARM_DEMCR_TRCENA;
   ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
 
-#if defined(NEO_KHZ400) // 800 KHz check needed only if 400 KHz support enabled
+#if defined(NEO_KHZ400)  // 800 KHz check needed only if 400 KHz support enabled
   if (is800KHz) {
 #endif
     cyc = ARM_DWT_CYCCNT + CYCLES_800;
@@ -3191,8 +3142,7 @@ void Adafruit_NeoPixel::show(void) {
       pix = *p++;
       for (mask = 0x80; mask; mask >>= 1) {
         // Wait until the beginning of the next bit period.
-        while (ARM_DWT_CYCCNT - cyc < CYCLES_800)
-          ;
+        while (ARM_DWT_CYCCNT - cyc < CYCLES_800);
         cyc = ARM_DWT_CYCCNT;
         // Set the pin high:
 #if defined(ARDUINO_ARCH_MBED_PORTENTA) || defined(ARDUINO_ARCH_MBED_GIGA)
@@ -3202,11 +3152,9 @@ void Adafruit_NeoPixel::show(void) {
 #endif
         // Keep the pin high for T1H or T0H depending on the data bit:
         if (pix & mask) {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T1H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T1H);
         } else {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T0H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_800_T0H);
         }
         // Set the pin low:
 #if defined(ARDUINO_ARCH_MBED_PORTENTA) || defined(ARDUINO_ARCH_MBED_GIGA)
@@ -3217,16 +3165,14 @@ void Adafruit_NeoPixel::show(void) {
       }
     }
     // Ensure the final low state lasts the full period.
-    while (ARM_DWT_CYCCNT - cyc < CYCLES_800)
-      ;
+    while (ARM_DWT_CYCCNT - cyc < CYCLES_800);
 #if defined(NEO_KHZ400)
-  } else { // 400 kHz bitstream
+  } else {  // 400 kHz bitstream
     cyc = ARM_DWT_CYCCNT + CYCLES_400;
     while (p < end) {
       pix = *p++;
       for (mask = 0x80; mask; mask >>= 1) {
-        while (ARM_DWT_CYCCNT - cyc < CYCLES_400)
-          ;
+        while (ARM_DWT_CYCCNT - cyc < CYCLES_400);
         cyc = ARM_DWT_CYCCNT;
         // Set the pin high:
 #if defined(ARDUINO_ARCH_MBED_PORTENTA) || defined(ARDUINO_ARCH_MBED_GIGA)
@@ -3235,11 +3181,9 @@ void Adafruit_NeoPixel::show(void) {
         *set = msk;
 #endif
         if (pix & mask) {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T1H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T1H);
         } else {
-          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T0H)
-            ;
+          while (ARM_DWT_CYCCNT - cyc < CYCLES_400_T0H);
         }
         // Set the pin low:
 #if defined(ARDUINO_ARCH_MBED_PORTENTA) || defined(ARDUINO_ARCH_MBED_GIGA)
@@ -3250,12 +3194,11 @@ void Adafruit_NeoPixel::show(void) {
       }
     }
     // Ensure the final low state lasts the full period.
-    while (ARM_DWT_CYCCNT - cyc < CYCLES_400)
-      ;
+    while (ARM_DWT_CYCCNT - cyc < CYCLES_400);
   }
-#endif // NEO_KHZ400
+#endif  // NEO_KHZ400
 
-#endif // ARM
+#endif  // ARM
 
   // END ARM ----------------------------------------------------------------
 
@@ -3274,20 +3217,20 @@ void Adafruit_NeoPixel::show(void) {
 
   // Arduino 101  -----------------------------------------------------------
 
-#define NOPx7                                                                  \
-  {                                                                            \
-    __builtin_arc_nop();                                                       \
-    __builtin_arc_nop();                                                       \
-    __builtin_arc_nop();                                                       \
-    __builtin_arc_nop();                                                       \
-    __builtin_arc_nop();                                                       \
-    __builtin_arc_nop();                                                       \
-    __builtin_arc_nop();                                                       \
+#define NOPx7 \
+  { \
+    __builtin_arc_nop(); \
+    __builtin_arc_nop(); \
+    __builtin_arc_nop(); \
+    __builtin_arc_nop(); \
+    __builtin_arc_nop(); \
+    __builtin_arc_nop(); \
+    __builtin_arc_nop(); \
   }
 
   PinDescription *pindesc = &g_APinDescription[pin];
   register uint32_t loop =
-      8 * numBytes; // one loop to handle all bytes and all bits
+    8 * numBytes;  // one loop to handle all bytes and all bits
   register uint8_t *p = pixels;
   register uint32_t currByte = (uint32_t)(*p);
   register uint32_t currBit = 0x80 & currByte;
@@ -3306,7 +3249,7 @@ void Adafruit_NeoPixel::show(void) {
     register uint32_t reg_bit_high = reg_val | (1 << pindesc->ulGPIOId);
     register uint32_t reg_bit_low = reg_val & ~(1 << pindesc->ulGPIOId);
 
-    loop += 1; // include first, special iteration
+    loop += 1;  // include first, special iteration
     while (loop--) {
       if (!first) {
         currByte <<= 1;
@@ -3316,7 +3259,7 @@ void Adafruit_NeoPixel::show(void) {
       // 1 is >550ns high and >450ns low; 0 is 200..500ns high and >450ns low
       __builtin_arc_sr(first ? reg_bit_low : reg_bit_high,
                        (volatile uint32_t)reg);
-      if (currBit) { // ~400ns HIGH (740ns overall)
+      if (currBit) {  // ~400ns HIGH (740ns overall)
         NOPx7 NOPx7
       }
       // ~340ns HIGH
@@ -3326,7 +3269,7 @@ void Adafruit_NeoPixel::show(void) {
       __builtin_arc_sr(reg_bit_low, (volatile uint32_t)reg);
       NOPx7 NOPx7
 
-          if (bitCounter >= 8) {
+        if (bitCounter >= 8) {
         bitCounter = 0;
         currByte = (uint32_t)(*++p);
       }
@@ -3340,24 +3283,24 @@ void Adafruit_NeoPixel::show(void) {
     register uint32_t reg_bit_high = reg_val | (1 << pindesc->ulGPIOId);
     register uint32_t reg_bit_low = reg_val & ~(1 << pindesc->ulGPIOId);
 
-    loop += 1; // include first, special iteration
+    loop += 1;  // include first, special iteration
     while (loop--) {
       if (!first) {
         currByte <<= 1;
         bitCounter++;
       }
       MMIO_REG_VAL(reg) = first ? reg_bit_low : reg_bit_high;
-      if (currBit) { // ~430ns HIGH (740ns overall)
+      if (currBit) {  // ~430ns HIGH (740ns overall)
         NOPx7 NOPx7 __builtin_arc_nop();
       }
       // ~310ns HIGH
       NOPx7
 
-          // 850ns LOW; per spec, max allowed low here is 5000ns */
-          MMIO_REG_VAL(reg) = reg_bit_low;
+        // 850ns LOW; per spec, max allowed low here is 5000ns */
+        MMIO_REG_VAL(reg) = reg_bit_low;
       NOPx7 NOPx7
 
-          if (bitCounter >= 8) {
+        if (bitCounter >= 8) {
         bitCounter = 0;
         currByte = (uint32_t)(*++p);
       }
@@ -3370,7 +3313,7 @@ void Adafruit_NeoPixel::show(void) {
 #elif defined(ARDUINO_ARCH_CH32)
   ch32Show(gpioPort, gpioPin, pixels, numBytes, is800KHz);
 #elif defined(ARDUINO_ARCH_RP2040) && defined(__riscv)
-  rp2040Show(pixels, numBytes); // Use PIO
+  rp2040Show(pixels, numBytes);  // Use PIO
 #else
 #error Architecture not supported
 #endif
@@ -3381,7 +3324,7 @@ void Adafruit_NeoPixel::show(void) {
   interrupts();
 #endif
 
-  endTime = micros(); // Save EOD time for latch on next call
+  endTime = micros();  // Save EOD time for latch on next call
 }
 
 /*!
@@ -3391,7 +3334,7 @@ void Adafruit_NeoPixel::show(void) {
 */
 void Adafruit_NeoPixel::setPin(int16_t p) {
   if (begun && (pin >= 0))
-    pinMode(pin, INPUT); // Disable existing out pin
+    pinMode(pin, INPUT);  // Disable existing out pin
   pin = p;
   if (begun) {
     pinMode(p, OUTPUT);
@@ -3412,8 +3355,7 @@ void Adafruit_NeoPixel::setPin(int16_t p) {
   gpioPort = get_GPIO_Port(CH_PORT(pin_name));
   gpioPin = CH_GPIO_PIN(pin_name);
 #if defined(CH32V20x_D6)
-  if (gpioPort == GPIOC &&
-      ((*(volatile uint32_t *)0x40022030) & 0x0F000000) == 0) {
+  if (gpioPort == GPIOC && ((*(volatile uint32_t *)0x40022030) & 0x0F000000) == 0) {
     gpioPin = gpioPin >> 13;
   }
 #endif
@@ -3440,19 +3382,19 @@ void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint8_t r, uint8_t g,
                                       uint8_t b) {
 
   if (n < numLEDs) {
-    if (brightness) { // See notes in setBrightness()
+    if (brightness) {  // See notes in setBrightness()
       r = (r * brightness) >> 8;
       g = (g * brightness) >> 8;
       b = (b * brightness) >> 8;
     }
     uint8_t *p;
-    if (wOffset == rOffset) { // Is an RGB-type strip
-      p = &pixels[n * 3];     // 3 bytes per pixel
-    } else {                  // Is a WRGB-type strip
-      p = &pixels[n * 4];     // 4 bytes per pixel
-      p[wOffset] = 0;         // But only R,G,B passed -- set W to 0
+    if (wOffset == rOffset) {  // Is an RGB-type strip
+      p = &pixels[n * 3];      // 3 bytes per pixel
+    } else {                   // Is a WRGB-type strip
+      p = &pixels[n * 4];      // 4 bytes per pixel
+      p[wOffset] = 0;          // But only R,G,B passed -- set W to 0
     }
-    p[rOffset] = r; // R,G,B always stored
+    p[rOffset] = r;  // R,G,B always stored
     p[gOffset] = g;
     p[bOffset] = b;
   }
@@ -3472,20 +3414,20 @@ void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint8_t r, uint8_t g,
                                       uint8_t b, uint8_t w) {
 
   if (n < numLEDs) {
-    if (brightness) { // See notes in setBrightness()
+    if (brightness) {  // See notes in setBrightness()
       r = (r * brightness) >> 8;
       g = (g * brightness) >> 8;
       b = (b * brightness) >> 8;
       w = (w * brightness) >> 8;
     }
     uint8_t *p;
-    if (wOffset == rOffset) { // Is an RGB-type strip
-      p = &pixels[n * 3];     // 3 bytes per pixel (ignore W)
-    } else {                  // Is a WRGB-type strip
-      p = &pixels[n * 4];     // 4 bytes per pixel
-      p[wOffset] = w;         // Store W
+    if (wOffset == rOffset) {  // Is an RGB-type strip
+      p = &pixels[n * 3];      // 3 bytes per pixel (ignore W)
+    } else {                   // Is a WRGB-type strip
+      p = &pixels[n * 4];      // 4 bytes per pixel
+      p[wOffset] = w;          // Store W
     }
-    p[rOffset] = r; // Store R,G,B
+    p[rOffset] = r;  // Store R,G,B
     p[gOffset] = g;
     p[bOffset] = b;
   }
@@ -3501,7 +3443,7 @@ void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint8_t r, uint8_t g,
 void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint32_t c) {
   if (n < numLEDs) {
     uint8_t *p, r = (uint8_t)(c >> 16), g = (uint8_t)(c >> 8), b = (uint8_t)c;
-    if (brightness) { // See notes in setBrightness()
+    if (brightness) {  // See notes in setBrightness()
       r = (r * brightness) >> 8;
       g = (g * brightness) >> 8;
       b = (b * brightness) >> 8;
@@ -3534,7 +3476,7 @@ void Adafruit_NeoPixel::fill(uint32_t c, uint16_t first, uint16_t count) {
   uint16_t i, end;
 
   if (first >= numLEDs) {
-    return; // If first LED is past end of strip, nothing to do
+    return;  // If first LED is past end of strip, nothing to do
   }
 
   // Calculate the index ONE AFTER the last pixel to fill
@@ -3611,45 +3553,43 @@ uint32_t Adafruit_NeoPixel::ColorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
   // the constants below are not the multiples of 256 you might expect.
 
   // Convert hue to R,G,B (nested ifs faster than divide+mod+switch):
-  if (hue < 510) { // Red to Green-1
+  if (hue < 510) {  // Red to Green-1
     b = 0;
-    if (hue < 255) { //   Red to Yellow-1
+    if (hue < 255) {  //   Red to Yellow-1
       r = 255;
-      g = hue;       //     g = 0 to 254
-    } else {         //   Yellow to Green-1
-      r = 510 - hue; //     r = 255 to 1
+      g = hue;        //     g = 0 to 254
+    } else {          //   Yellow to Green-1
+      r = 510 - hue;  //     r = 255 to 1
       g = 255;
     }
-  } else if (hue < 1020) { // Green to Blue-1
+  } else if (hue < 1020) {  // Green to Blue-1
     r = 0;
-    if (hue < 765) { //   Green to Cyan-1
+    if (hue < 765) {  //   Green to Cyan-1
       g = 255;
-      b = hue - 510;  //     b = 0 to 254
-    } else {          //   Cyan to Blue-1
-      g = 1020 - hue; //     g = 255 to 1
+      b = hue - 510;   //     b = 0 to 254
+    } else {           //   Cyan to Blue-1
+      g = 1020 - hue;  //     g = 255 to 1
       b = 255;
     }
-  } else if (hue < 1530) { // Blue to Red-1
+  } else if (hue < 1530) {  // Blue to Red-1
     g = 0;
-    if (hue < 1275) { //   Blue to Magenta-1
-      r = hue - 1020; //     r = 0 to 254
+    if (hue < 1275) {  //   Blue to Magenta-1
+      r = hue - 1020;  //     r = 0 to 254
       b = 255;
-    } else { //   Magenta to Red-1
+    } else {  //   Magenta to Red-1
       r = 255;
-      b = 1530 - hue; //     b = 255 to 1
+      b = 1530 - hue;  //     b = 255 to 1
     }
-  } else { // Last 0.5 Red (quicker than % operator)
+  } else {  // Last 0.5 Red (quicker than % operator)
     r = 255;
     g = b = 0;
   }
 
   // Apply saturation and value to R,G,B, pack into 32-bit result:
-  uint32_t v1 = 1 + val;  // 1 to 256; allows >>8 instead of /255
-  uint16_t s1 = 1 + sat;  // 1 to 256; same reason
-  uint8_t s2 = 255 - sat; // 255 to 0
-  return ((((((r * s1) >> 8) + s2) * v1) & 0xff00) << 8) |
-         (((((g * s1) >> 8) + s2) * v1) & 0xff00) |
-         (((((b * s1) >> 8) + s2) * v1) >> 8);
+  uint32_t v1 = 1 + val;   // 1 to 256; allows >>8 instead of /255
+  uint16_t s1 = 1 + sat;   // 1 to 256; same reason
+  uint8_t s2 = 255 - sat;  // 255 to 0
+  return ((((((r * s1) >> 8) + s2) * v1) & 0xff00) << 8) | (((((g * s1) >> 8) + s2) * v1) & 0xff00) | (((((b * s1) >> 8) + s2) * v1) >> 8);
 }
 
 /*!
@@ -3665,11 +3605,11 @@ uint32_t Adafruit_NeoPixel::ColorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
 */
 uint32_t Adafruit_NeoPixel::getPixelColor(uint16_t n) const {
   if (n >= numLEDs)
-    return 0; // Out of bounds, return no color.
+    return 0;  // Out of bounds, return no color.
 
   uint8_t *p;
 
-  if (wOffset == rOffset) { // Is RGB-type device
+  if (wOffset == rOffset) {  // Is RGB-type device
     p = &pixels[n * 3];
     if (brightness) {
       // Stored color was decimated by setBrightness(). Returned value
@@ -3677,24 +3617,17 @@ uint32_t Adafruit_NeoPixel::getPixelColor(uint16_t n) const {
       // value used when setting the pixel color, but there will always be
       // some error -- those bits are simply gone. Issue is most
       // pronounced at low brightness levels.
-      return (((uint32_t)(p[rOffset] << 8) / brightness) << 16) |
-             (((uint32_t)(p[gOffset] << 8) / brightness) << 8) |
-             ((uint32_t)(p[bOffset] << 8) / brightness);
+      return (((uint32_t)(p[rOffset] << 8) / brightness) << 16) | (((uint32_t)(p[gOffset] << 8) / brightness) << 8) | ((uint32_t)(p[bOffset] << 8) / brightness);
     } else {
       // No brightness adjustment has been made -- return 'raw' color
-      return ((uint32_t)p[rOffset] << 16) | ((uint32_t)p[gOffset] << 8) |
-             (uint32_t)p[bOffset];
+      return ((uint32_t)p[rOffset] << 16) | ((uint32_t)p[gOffset] << 8) | (uint32_t)p[bOffset];
     }
-  } else { // Is RGBW-type device
+  } else {  // Is RGBW-type device
     p = &pixels[n * 4];
-    if (brightness) { // Return scaled color
-      return (((uint32_t)(p[wOffset] << 8) / brightness) << 24) |
-             (((uint32_t)(p[rOffset] << 8) / brightness) << 16) |
-             (((uint32_t)(p[gOffset] << 8) / brightness) << 8) |
-             ((uint32_t)(p[bOffset] << 8) / brightness);
-    } else { // Return raw color
-      return ((uint32_t)p[wOffset] << 24) | ((uint32_t)p[rOffset] << 16) |
-             ((uint32_t)p[gOffset] << 8) | (uint32_t)p[bOffset];
+    if (brightness) {  // Return scaled color
+      return (((uint32_t)(p[wOffset] << 8) / brightness) << 24) | (((uint32_t)(p[rOffset] << 8) / brightness) << 16) | (((uint32_t)(p[gOffset] << 8) / brightness) << 8) | ((uint32_t)(p[bOffset] << 8) / brightness);
+    } else {  // Return raw color
+      return ((uint32_t)p[wOffset] << 24) | ((uint32_t)p[rOffset] << 16) | ((uint32_t)p[gOffset] << 8) | (uint32_t)p[bOffset];
     }
   }
 }
@@ -3722,7 +3655,7 @@ void Adafruit_NeoPixel::setBrightness(uint8_t b) {
   // (color values are interpreted literally; no scaling), 1 = min
   // brightness (off), 255 = just below max brightness.
   uint8_t newBrightness = b + 1;
-  if (newBrightness != brightness) { // Compare against prior value
+  if (newBrightness != brightness) {  // Compare against prior value
     // Brightness has changed -- re-scale existing data in RAM,
     // This process is potentially "lossy," especially when increasing
     // brightness. The tight timing in the WS2811/WS2812 code means there
@@ -3734,10 +3667,10 @@ void Adafruit_NeoPixel::setBrightness(uint8_t b) {
     // quite visible in the re-scaled version. For a non-destructive
     // change, you'll need to re-render the full strip data. C'est la vie.
     uint8_t c, *ptr = pixels,
-               oldBrightness = brightness - 1; // De-wrap old brightness value
+               oldBrightness = brightness - 1;  // De-wrap old brightness value
     uint16_t scale;
     if (oldBrightness == 0)
-      scale = 0; // Avoid /0
+      scale = 0;  // Avoid /0
     else if (b == 255)
       scale = 65535 / oldBrightness;
     else
@@ -3754,12 +3687,16 @@ void Adafruit_NeoPixel::setBrightness(uint8_t b) {
   @brief   Retrieve the last-set brightness value for the strip.
   @return  Brightness value: 0 = minimum (off), 255 = maximum.
 */
-uint8_t Adafruit_NeoPixel::getBrightness(void) const { return brightness - 1; }
+uint8_t Adafruit_NeoPixel::getBrightness(void) const {
+  return brightness - 1;
+}
 
 /*!
   @brief   Fill the whole NeoPixel strip with 0 / black / off.
 */
-void Adafruit_NeoPixel::clear(void) { memset(pixels, 0, numBytes); }
+void Adafruit_NeoPixel::clear(void) {
+  memset(pixels, 0, numBytes);
+}
 
 // A 32-bit variant of gamma8() that applies the same function
 // to all components of a packed RGB or WRGB value.
@@ -3775,7 +3712,7 @@ uint32_t Adafruit_NeoPixel::gamma32(uint32_t x) {
   // encountered in reality they can mask values going in or coming out.
   for (uint8_t i = 0; i < 4; i++)
     y[i] = gamma8(y[i]);
-  return x; // Packed 32-bit return
+  return x;  // Packed 32-bit return
 }
 
 /*!
@@ -3842,6 +3779,6 @@ neoPixelType Adafruit_NeoPixel::str2order(const char *v) {
     r &= 3;
   }
   if (w < 0)
-    w = r; // If 'w' not specified, duplicate r bits
+    w = r;  // If 'w' not specified, duplicate r bits
   return (w << 6) | (r << 4) | ((g & 3) << 2) | (b & 3);
 }
