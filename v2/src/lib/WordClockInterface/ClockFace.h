@@ -10,11 +10,6 @@
  */
 class ClockFace {
   /**
-   * Initialise the clock face with default settings.
-   */
-  virtual void begin(uint8_t brightness, uint8_t effectIdx);
-
-  /**
    * Write the current state to the LEDs.
    * Takes into account internal state such as brightness and effects, if applicable.
    */
@@ -26,14 +21,7 @@ class ClockFace {
   virtual void update(DateTime& dt);
 
   /**
-   * Cycle through brightness settings.
-   * Returns the resulting brightness value.
+   * Set the universal brightness of the clock face.
    */
-  virtual uint8_t cycleBrightness();
-
-  /**
-   * Cycle through effect settings.
-   * Returns the resulting effect index.
-   */
-  virtual uint8_t cycleEffect();
+  uint8_t setBrightness(uint8_t brightness);
 };

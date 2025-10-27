@@ -50,6 +50,16 @@ public:
    */
   void setDateTime(DateTime &dt);
 
+  /**
+   * Read a byte from the on-board EEPROM.
+   */
+  uint8_t eepromRead(uint8_t eepromAddr);
+
+  /**
+   * Write a byte to the on-board EEPROM.
+   */
+  void eepromWrite(uint8_t eepromAddr, uint8_t value);
+
 private:
   /**
    * I2C address.
@@ -87,16 +97,6 @@ private:
    * Used for changing config bits.
    */
   void i2cWriteBit(uint8_t reg, uint8_t bitPos, bool bitVal);
-
-  /**
-   * Read a byte from the on-board EEPROM.
-   */
-  uint8_t eepromRead(uint8_t eepromAddr);
-
-  /**
-   * Write a byte to the on-board EEPROM.
-   */
-  void eepromWrite(uint8_t eepromAddr, uint8_t value);
 
   /**
    * Wait until the EEBusy bit is cleared before continuing an EEPROM read or

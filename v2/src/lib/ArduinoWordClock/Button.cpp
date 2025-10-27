@@ -33,6 +33,6 @@ bool Button::read() {
   if (this->consumed) {
     return false;
   }
-  this->consumed = false;
+  this->consumed = true;
   return state;
 }

@@ -8,11 +8,6 @@ KoreanClockFace::KoreanClockFace(LedMatrix &ledMatrix, uint8_t brightness, uint8
   _clear();
 }
 
-void KoreanClockFace::begin(uint8_t brightness, uint8_t effectIdx) {
-  _brightness = brightness;
-  _effectIdx = effectIdx;
-}
-
 void KoreanClockFace::show() {
   LedColor on = { 255, 255, 255, 255 };
   _ledMatrix.clear();
@@ -87,12 +82,9 @@ void KoreanClockFace::update(DateTime &dt) {
   }
 }
 
-uint8_t KoreanClockFace::cycleBrightness() {
+uint8_t KoreanClockFace::setBrightness(uint8_t brightness) {
+  _ledMatrix.setBrightness(brightness);
   return _brightness;
-}
-
-uint8_t KoreanClockFace::cycleEffect() {
-  return _effectIdx;
 }
 
 void KoreanClockFace::_clear() {

@@ -51,11 +51,9 @@ class KoreanClockFace : public ClockFace {
 public:
   KoreanClockFace(LedMatrix &ledMatrix, uint8_t brightness = 255, uint8_t effectIdx = 0);
 
-  void begin(uint8_t brightness, uint8_t effectIdx);
   void show();
   void update(DateTime &dt);
-  uint8_t cycleBrightness();
-  uint8_t cycleEffect();
+  uint8_t setBrightness(uint8_t brightness);
 
   /* 
    * For testing only.
