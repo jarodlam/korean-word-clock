@@ -4,6 +4,9 @@
 #include <KoreanClockFace.h>
 #include <clockutils.h>
 #include <stdint.h>
+#include <stdio.h>
+
+#define DEBUG
 
 /*
  * Uncomment to set the time.
@@ -35,10 +38,19 @@ Button buttonTimePlus{ PIN_SW1 };
 Button buttonTimeMinus{ PIN_SW3 };  // Labelled as "MODE"
 Button buttonBrightness{ PIN_SW2 };
 
+void printDebug(DateTime &dt, uint8_t brightness, bool dst) {
+  char buf[64];
+  sprintf(buf, "%02u:%02u:%02u BRI:%u DST:%u\n", dt.hour, dt.minute, dt.second, brightness, dst);
+  Serial.print(buf);
+}
+
 void setup() {
-  Serial.begin(9600);
   Wire.begin();
   rtc.begin();
+
+#ifdef DEBUG
+  Serial.begin(9600);
+#endif
 
 #ifdef SET_TIME
   DateTime newTime = DateTime{ SET_TIME };
@@ -57,19 +69,27 @@ void loop() {
   buttonBrightness.update();
 
   if (buttonTimePlus.read()) {
+    Serial.println("button time plus");
+    timePlus(dt);
+    rtc.setDateTime(dt);
+  }
+  if (buttonTimeMinus.read()) {
+    Serial.println("button time minus");
+    timeMinus(dt);
+    rtc.setDateTime(dt);
   }
   if (buttonBrightness.read()) {
+    Serial.println("button brightness");
     uint8_t newBrightness = cycleBrightness(rtc.eepromRead(EEADDR_BRIGHTNESS));
     rtc.eepromWrite(EEADDR_BRIGHTNESS, newBrightness);
     clockFace.setBrightness(newBrightness);
   }
 
-  Serial.print(dt.hour);
-  Serial.print(":");
-  Serial.print(dt.minute);
-  Serial.print(":");
-  Serial.print(dt.second);
-  Serial.println();
+  // TODO: DST
+
+#ifdef DEBUG
+  printDebug(dt, matrix.getBrightness(), false);
+#endif
 
   clockFace.update(dt);
   clockFace.show();

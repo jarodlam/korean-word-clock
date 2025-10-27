@@ -23,6 +23,7 @@ struct LedColor {
  */
 class LedMatrix {
 public:
+  virtual ~LedMatrix() {}
   /**
    * Initialise the hardware.
    */
@@ -42,6 +43,11 @@ public:
    * Set global brightness for the LED strip.
    */
   virtual void setBrightness(uint8_t brightness) {}
+
+  /**
+   * Get current global brightness for the LED strip.
+   */
+  virtual uint8_t getBrightness() { return 0; }
 
   /**
    * Set LEDs for a cell at a specific coordinate.

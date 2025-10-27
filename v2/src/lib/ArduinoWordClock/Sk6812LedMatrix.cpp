@@ -25,6 +25,10 @@ void Sk6812LedMatrix::setBrightness(uint8_t v) {
   return neopixel->setBrightness(v);
 }
 
+uint8_t Sk6812LedMatrix::getBrightness() {
+  return neopixel->getBrightness();
+}
+
 void Sk6812LedMatrix::setCell(LedPosition &pos, LedColor &color) {
   // Determine cell position along LED strip
   uint16_t verticalOffset = pos.y * width;

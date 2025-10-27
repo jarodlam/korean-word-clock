@@ -21,6 +21,7 @@ public:
   void show();
   void clear();
   void setBrightness(uint8_t brightness);
+  uint8_t getBrightness();
   void setCell(LedPosition &pos, LedColor &color);
 
 private:

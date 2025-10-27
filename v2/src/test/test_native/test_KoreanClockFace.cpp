@@ -1,17 +1,9 @@
 #include <unity.h>
-
+#include <stdint.h>
 #include <KoreanClockFace.h>
+#include <LedMatrix.h>
 
-// Minimal fakes / stubs for dependencies so we can instantiate KoreanClockFace.
-
-class FakeLedMatrix : public LedMatrix {
-public:
-  void begin() override {}
-  void show() override {}
-  void clear() override {}
-  void setBrightness(uint8_t) override {}
-  void setCell(LedPosition&, LedColor&) override {}
-};
+class FakeLedMatrix : public LedMatrix {};
 
 template<size_t N>
 void assertWordSet(const ClockWord<N>& word, bool* rawState) {
@@ -99,12 +91,10 @@ void test_update_midday() {
   assertWordSet(WORD_MIDDAY, state);
 }
 
-int main(int argc, char** argv) {
-  UNITY_BEGIN();
+void test_KoreanClockFace() {
   RUN_TEST(test_update_hour_only);
   RUN_TEST(test_update_quarter_past);
   RUN_TEST(test_update_twenty_five);
   RUN_TEST(test_update_midnight);
   RUN_TEST(test_update_midday);
-  return UNITY_END();
 }
